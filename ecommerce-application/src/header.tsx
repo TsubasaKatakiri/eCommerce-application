@@ -18,12 +18,12 @@ const Header = () => {
             <nav className="nav">
                 {!isAuthenticated ? (
                     <>
-                        <Link to="/login" className="nav-link">
+                          <button onClick={() => navigate('/login')} className="navigate-button">
                             Login
-                        </Link>
-                        <Link to="/register" className="nav-link">
+                        </button>
+                        <button onClick={() => navigate('/register')} className="navigate-button">
                             Sign Up
-                        </Link>
+                        </button>
                     </>
                 ) : (
                     <button onClick={handleLogout} className="logout-button">
