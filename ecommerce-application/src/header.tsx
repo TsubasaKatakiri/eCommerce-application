@@ -1,12 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from './store/hooks';
+import { logout } from './store/auth-slice';
+import { clearUser } from './store/user-slice';
 
 const Header = () => {
     const navigate = useNavigate();
-    const isAuthenticated = !!localStorage.getItem('myToken');
+    const isAuthenticated = !!localStorage.getItem('refreshToken');
+    const dispatch = useAppDispatch();
 
     const handleLogout = () => {
-        localStorage.removeItem('myToken');
-        navigate('/login');
+        dispatch(logout());
+        dispatch(clearUser());
+        location.reload();
     };
 
     return (
