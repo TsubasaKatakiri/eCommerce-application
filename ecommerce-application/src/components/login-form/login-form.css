@@ -4,6 +4,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: 20px;
+  width: 100%;
 }
 
 .login-form_field-group {
@@ -12,6 +13,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: 5px;
+  width: 100%;
 }
 
 .login-form_label {
@@ -29,6 +31,7 @@
   color: #333333;
   border: 1px solid #333333;
   border-radius: 5px;
+  width: 100%;
 }
 
 .login-form_field:-webkit-autofill,
