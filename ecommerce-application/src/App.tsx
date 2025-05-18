@@ -1,44 +1,34 @@
-import './App.css'
+import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import Header from './header';
+import Header from './components/header/header';
 
-import LoginPage from './pages/login/login-page'
-import SignUpPage from './signUpPage'
+import LoginPage from './pages/login/login-page';
+import SignUpPage from './pages/signup/sign-up-page';
+import type { ReactElement } from 'react';
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from './store/hooks';
-import { Dispatch, UnknownAction } from '@reduxjs/toolkit';
+import { useAppDispatch } from './store/hooks';
+import type { Dispatch, UnknownAction } from '@reduxjs/toolkit';
 import { refreshAccessToken } from './api/refresh-token';
 import { login, logout } from './store/auth-slice';
+import HomePage from './pages/home/home-page';
+import NotFoundPage from './pages/not-found/not-found-page';
 
-function Home() {
-  return (
-    <div>
-      <h1>Vite + React</h1>
-      <h2>главная страница</h2>
-      <div className="card">
-      </div>
-    </div>
-  );
-}
-
-const authHost = import.meta.env.VITE_AUTH_HOST;
-const projectKey = import.meta.env.VITE_PROJECT_KEY;
-const clientId = import.meta.env.VITE_CLIENT_ID;
-const clientSecret  = import.meta.env.VITE_CLIENT_SECRET;
-
-
-function App() {
-  const customer = useAppSelector(state => state.user.customer);
+function App(): ReactElement {
   const dispatch = useAppDispatch();
+
+  const authHost = import.meta.env.VITE_AUTH_HOST;
+  const projectKey = import.meta.env.VITE_PROJECT_KEY;
+  const clientId = import.meta.env.VITE_CLIENT_ID;
+  const clientSecret = import.meta.env.VITE_CLIENT_SECRET;
 
   async function getAnonymousToken(): Promise<void> {
     const response = await fetch(`${authHost}oauth/${projectKey}/anonymous/token`, {
       method: 'POST',
       headers: {
-        'Authorization': 'Basic ' + btoa(`${clientId}:${clientSecret}`),
-        'Content-Type': 'application/x-www-form-urlencoded'
+        Authorization: 'Basic ' + btoa(`${clientId}:${clientSecret}`),
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `grant_type=client_credentials&scope=manage_my_profile:${projectKey}`
+      body: `grant_type=client_credentials&scope=manage_my_profile:${projectKey}`,
     });
     const tokenData = await response.json();
     localStorage.setItem('anonymousToken', tokenData.access_token);
@@ -46,39 +36,38 @@ function App() {
 
   useEffect(() => {
     const anonymousToken = localStorage.getItem('anonymousToken');
-    if(!anonymousToken) getAnonymousToken();
-  }, [])
-
-  async function refreshTokens(refreshToken: string, dispatch: Dispatch<UnknownAction>): Promise<void>{
-    try {
-      const tokens = await refreshAccessToken(refreshToken);
-      dispatch(login({accessToken: tokens.accessToken, refreshToken: tokens.refreshToken}));
-    } catch (error) {
-      dispatch(logout());
-    }
-  }
+    if (!anonymousToken) getAnonymousToken();
+  }, []);
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     const accessTokenBestBefore = localStorage.getItem('accessTokenBestBefore');
     const refreshToken = localStorage.getItem('refreshToken');
-    if(refreshToken){
-      if(!accessToken || !accessTokenBestBefore || +accessTokenBestBefore <= Date.now()) {
-        refreshTokens(refreshToken, dispatch);
-      }
+    if (refreshToken && (!accessToken || !accessTokenBestBefore || +accessTokenBestBefore <= Date.now())) {
+      refreshTokens(refreshToken, dispatch);
     }
-  })
+  });
 
   return (
     <>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={localStorage.getItem('refreshToken') ? <Home/> : <LoginPage />} />
-        <Route path="/register" element={localStorage.getItem('refreshToken') ? <Home/> : <SignUpPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={localStorage.getItem('refreshToken') ? <HomePage /> : <LoginPage />} />
+        <Route path="/register" element={localStorage.getItem('refreshToken') ? <HomePage /> : <SignUpPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );
 }
 
-export default App
+export default App;
+
+async function refreshTokens(refreshToken: string, dispatch: Dispatch<UnknownAction>): Promise<void> {
+  try {
+    const tokens = await refreshAccessToken(refreshToken);
+    dispatch(login({ accessToken: tokens.accessToken, refreshToken: tokens.refreshToken }));
+  } catch {
+    dispatch(logout());
+  }
+}
