@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Header from './header';
 
 import LoginPage from './loginPage'
-import SignUpPage from './signUpPage'
+import SignUpPage from './singup-form/signUpPage'
 
 function Home() {
   return (
