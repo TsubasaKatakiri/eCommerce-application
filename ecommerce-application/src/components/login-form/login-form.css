@@ -31,6 +31,12 @@
   border-radius: 5px;
 }
 
+.login-form_field:-webkit-autofill,
+.login-form_field:-webkit-autofill:hover,
+.login-form_field:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 30px #ffffff inset;
+}
+
 .login-form_field::placeholder {
   color: #888888;
   font-style: italic;
