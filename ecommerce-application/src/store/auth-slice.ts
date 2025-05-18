@@ -28,6 +28,7 @@ export const authSlice = createSlice({
             state.refreshToken = null;
             state.isLoggedIn = false;
             localStorage.removeItem('accessToken');
+            localStorage.removeItem('accessTokenBestBefore');
             localStorage.removeItem('refreshToken');
         }
     }

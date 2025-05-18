@@ -5,7 +5,10 @@ import Header from './header';
 import LoginPage from './pages/login/login-page'
 import SignUpPage from './signUpPage'
 import { useEffect } from 'react';
-import { useAppSelector } from './store/hooks';
+import { useAppDispatch, useAppSelector } from './store/hooks';
+import { Dispatch, UnknownAction } from '@reduxjs/toolkit';
+import { refreshAccessToken } from './api/refresh-token';
+import { login, logout } from './store/auth-slice';
 
 function Home() {
   return (
@@ -25,7 +28,9 @@ const clientSecret  = import.meta.env.VITE_CLIENT_SECRET;
 
 
 function App() {
-  const customer = useAppSelector(state => state.user.customer) ;
+  const customer = useAppSelector(state => state.user.customer);
+  const dispatch = useAppDispatch();
+
   async function getAnonymousToken(): Promise<void> {
     const response = await fetch(`${authHost}oauth/${projectKey}/anonymous/token`, {
       method: 'POST',
@@ -42,9 +47,27 @@ function App() {
   useEffect(() => {
     const anonymousToken = localStorage.getItem('anonymousToken');
     if(!anonymousToken) getAnonymousToken();
-  })
+  }, [])
 
-  console.log(customer);
+  async function refreshTokens(refreshToken: string, dispatch: Dispatch<UnknownAction>): Promise<void>{
+    try {
+      const tokens = await refreshAccessToken(refreshToken);
+      dispatch(login({accessToken: tokens.accessToken, refreshToken: tokens.refreshToken}));
+    } catch (error) {
+      dispatch(logout());
+    }
+  }
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    const accessTokenBestBefore = localStorage.getItem('accessTokenBestBefore');
+    const refreshToken = localStorage.getItem('refreshToken');
+    if(refreshToken){
+      if(!accessToken || !accessTokenBestBefore || +accessTokenBestBefore <= Date.now()) {
+        refreshTokens(refreshToken, dispatch);
+      }
+    }
+  })
 
   return (
     <>

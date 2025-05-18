@@ -22,6 +22,8 @@ export const refreshAccessToken = async (refreshToken: string) => {
     }
 
     const data = await response.json();
+    const accessTokenBestBefore: number = Date.now() + data.expires_in * 1000;
+    localStorage.setItem('accessTokenBestBefore', accessTokenBestBefore.toString());
     return {
         accessToken: data.access_token,
         refreshToken: data.refresh_token || refreshToken

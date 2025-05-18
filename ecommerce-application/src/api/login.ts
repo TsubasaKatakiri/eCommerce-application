@@ -34,7 +34,8 @@ export const loginUser = async (email: string, password: string, dispatch: Dispa
     }
 
     const tokenData = await tokenResponse.json();
-    console.log(tokenData);
+    const accessTokenBestBefore: number = Date.now() + tokenData.expires_in * 1000;
+    localStorage.setItem('accessTokenBestBefore', accessTokenBestBefore.toString());
     dispatch(login({accessToken: tokenData.access_token, refreshToken: tokenData.refresh_token}))
 
     const userUrl = `${apiHost}${projectKey}/me/login`;
@@ -42,7 +43,6 @@ export const loginUser = async (email: string, password: string, dispatch: Dispa
             email: email,
             password: password,
         })
-    console.log(userParams);
     const userResponse = await fetch(userUrl, {
         method: 'POST',
         headers: {
