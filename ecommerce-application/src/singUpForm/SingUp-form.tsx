@@ -7,7 +7,7 @@ type Data={
 	billingCity:string,
 	billingPostal: number,
 	billingStreet: string,
-	billingValue: string,
+	billingValue: string,git 
 	birthday:string,
 	commonAddress: boolean,
 	defaultBillingAddress:boolean,
@@ -21,6 +21,7 @@ type Data={
 	shippingStreet: string,
 	shippingValue: string
 }
+/*
 const clientId: string ="YoiwRaSBvj3yNdFx2Wu_vYgy"
 const clientSecret: string = "BHH278dO3Zv2kGDhjmBo_lD3zTxsdmkU"
 const projectKey: string = "tsukisakura"
@@ -37,9 +38,9 @@ async function getAnonymousToken(): Promise<void> {
 	const tokenData = await response.json();
 	localStorage.setItem('anonymousToken', tokenData.access_token);
 }
-
+*/
 const SignUpPage = () => {
-    const {
+		const {
 				register,
 				handleSubmit,
 				formState: { errors }
@@ -296,7 +297,7 @@ export const addCustomer = async function (customer: Data) {
 			body: JSON.stringify(customer),
 			headers: {
 				'Content-type': 'application/json;',
-			  Authorization: "Bearer"+' ' + localStorage.getItem("token"),
+				Authorization: "Bearer"+' ' + localStorage.getItem("token"),
 			}
 		})
 			.then((response) => response.json())
