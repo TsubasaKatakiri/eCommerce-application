@@ -21,6 +21,7 @@ type Data={
 	shippingStreet: string,
 	shippingValue: string
 }
+/*
 const clientId: string ="YoiwRaSBvj3yNdFx2Wu_vYgy"
 const clientSecret: string = "BHH278dO3Zv2kGDhjmBo_lD3zTxsdmkU"
 const projectKey: string = "tsukisakura"
@@ -37,7 +38,7 @@ async function getAnonymousToken(): Promise<void> {
 	const tokenData = await response.json();
 	localStorage.setItem('anonymousToken', tokenData.access_token);
 }
-
+*/
 const SignUpPage = () => {
     const {
 				register,
@@ -50,6 +51,7 @@ const SignUpPage = () => {
 				addCustomer(data);
 			};
 		
+
 			const [billingValue, setbillingValue] = useState<string>('');
 			const [shippingValue, setshippingValue] = useState<string>('');
 			const [defaultShippingAddress, setdefaultShippingAddress] = useState<boolean>(false);
@@ -59,14 +61,10 @@ const SignUpPage = () => {
 			
 			const countries: ((number|string)[])[] = [['Germany',
 					 5], ['United States', 5], ['Russia', 6], ['Belarus', 6], ['France', 5], ['Spain',5]];
-			
-			let ind: number|string =0;	
-			let currentcount: number|string='';	 
+	 
 			let options = countries.map((country, index) => {
-					ind = country[1];
-				currentcount = country[0];
 				return ( 
-					<option className="singup-form__option" value={country[0]} key={index}>{country[0]}</option> 
+					<option className="singup-form__option" value={country[index]} key={index}>{countries[index][0]}</option> 
 				)
 			});
 	
@@ -183,7 +181,7 @@ const SignUpPage = () => {
 					<div className="singup-form__group">
 						<label className='singup-form__label'>Country</label>
 						<div className='singup-form__input-group'>
-						<select className='singup-form__select' defaultValue={billingValue} {...register('billingValue')} onChange={(event) => setbillingValue(event.target.value)}>
+						<select className='singup-form__select' value={billingValue} {...register('billingValue')} onChange={(event) => setbillingValue(event.target.value)}>
 							{options}
 						</select>
 						</div>
@@ -192,12 +190,12 @@ const SignUpPage = () => {
 					<div className="singup-form__group">
 					<label className='singup-form__label'>Postal</label>
 						<div className='singup-form__input-group'>
-							<input className='singup-form__input' placeholder="postal" {...register('billingPostal', { pattern:/^[0-9]`${ind}`$/, required: true })} /> 
+							<input className='singup-form__input' placeholder="postal" {...register('billingPostal', { pattern:/^[0-9].{5}$/, required: true })} /> 
 							{errors.billingPostal?.type === "required" && (
 								<p className="singup-form__error">postal is required.</p>
 							)}
 							{errors.billingPostal?.type === "pattern" && (
-								<p className="singup-form__error">The postal {currentcount} must contain {ind} digits</p>
+								<p className="singup-form__error">The postal must contain {billingValue} digits</p>
 							)}	
 								</div>
 						</div>
@@ -243,7 +241,7 @@ const SignUpPage = () => {
 				 <div className="singup-form__group">
 					<label className='singup-form__label'>Country</label>
 					<div className='singup-form__input-group'>
-					<select className='singup-form__select' defaultValue={shippingValue} {...register('shippingValue')} onChange={(event) => setshippingValue(event.target.value)}>
+					<select className='singup-form__select' value={shippingValue} {...register('shippingValue')} onChange={(event) => setshippingValue(event.target.value)}>
 					{options}
 					</select>
 					</div>
@@ -252,16 +250,13 @@ const SignUpPage = () => {
 				 <div className="singup-form__group">
 					<label className='singup-form__label'>Postal</label>
 					<div className='singup-form__input-group'>
-					<input className='singup-form__input' placeholder="postal"  {...register('shippingPostal', { pattern:/^[0-9]$/, minLength: +shippingValue[shippingValue.length-1], required: true })} /> 
+					<input className='singup-form__input' placeholder="postal" {...register('shippingPostal', { pattern:/^[0-9].{5}$/, required: true })} /> 
 					{errors.shippingPostal?.type === "required" && (
-						<p className="singup-form__error">postal is required.</p>
-					)}
-					{errors.shippingPostal?.type === "pattern" && (
-						<p className="singup-form__error">The postal must contain only digits</p>
-					)}	
-						{errors.shippingPostal?.type === "minLength" && (
-						<p className="singup-form__error">The postal must contain {shippingValue[shippingValue.length-1]} digit</p>
-					)}
+								<p className="singup-form__error">postal is required.</p>
+							)}
+							{errors.shippingPostal?.type === "pattern" && (
+								<p className="singup-form__error">The postal must contain {shippingValue} digits</p>
+							)}	
 					</div>
 				 </div>
 		

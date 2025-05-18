@@ -1,16 +1,9 @@
-<<<<<<< HEAD
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-
-=======
->>>>>>> 4e98b371fec0cf42921a491313e87384793fb25e
 import './App.css'
 import { Routes, Route } from 'react-router-dom';
 import Header from './header';
 
 import LoginPage from './loginPage'
-import SignUpPage from './singup-form/signUpPage'
+import SignUpPage from './singUp-form/signUpPage'
 
 function Home() {
   return (
