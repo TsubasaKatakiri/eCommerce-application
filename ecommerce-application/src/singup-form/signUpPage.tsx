@@ -31,7 +31,7 @@ const SignUpPage = () => {
 		
 			const onSubmit = (data: Data): void => {
 				console.log(data);
-				addCustomer(data);
+			//	addCustomer(data);
 			};
 		
 
