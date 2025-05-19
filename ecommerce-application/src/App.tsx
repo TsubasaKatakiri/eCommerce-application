@@ -2,6 +2,10 @@ import './app.css';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/header/header';
 
+<<<<<<< HEAD
+import LoginPage from './loginPage'
+import SignUpPage from './singUp-form/signUpPage'
+=======
 import LoginPage from './pages/login/login-page';
 import SignUpPage from './pages/signup/sign-up-page';
 import type { ReactElement } from 'react';
@@ -47,6 +51,7 @@ function App(): ReactElement {
       refreshTokens(refreshToken, dispatch);
     }
   });
+>>>>>>> 959ba68d296f6f93269e336a25fa517376f81949
 
   return (
     <Fragment>
