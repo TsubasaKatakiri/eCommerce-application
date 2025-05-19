@@ -1,9 +1,11 @@
 import './App.css'
 import { Routes, Route } from 'react-router-dom';
 import Header from './header';
+
 import RegistrationPage from './register'; 
 import LoginPage from './loginPage';
 import HomePage from './homePage'; 
+
 
 function App() {
   return (
