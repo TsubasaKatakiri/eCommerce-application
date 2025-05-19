@@ -13,6 +13,7 @@ const NotFoundPage: React.FC = () => {
           <p className="not-found_message">
             Please, forgive me, master... I looked everywhere, but I couldn't find what you wanted...
           </p>
+          <p>The page you requested cannot be found.</p>
           <div className="not-found_button-block">
             <button className="not-found_button" onClick={() => history.back()}>
               Back
