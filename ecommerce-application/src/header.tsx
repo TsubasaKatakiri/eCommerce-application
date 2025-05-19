@@ -35,6 +35,10 @@ const Header = () => {
     );
 };
 
+<<<<<<< HEAD
 
 export default Header;
 
+=======
+export default Header;
+>>>>>>> auth-header-navigation
