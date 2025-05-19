@@ -1,11 +1,11 @@
-import './App.css';
+import './app.css';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/header/header';
 
 import LoginPage from './pages/login/login-page';
 import SignUpPage from './pages/signup/sign-up-page';
 import type { ReactElement } from 'react';
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useAppDispatch } from './store/hooks';
 import type { Dispatch, UnknownAction } from '@reduxjs/toolkit';
 import { refreshAccessToken } from './api/refresh-token';
@@ -49,15 +49,17 @@ function App(): ReactElement {
   });
 
   return (
-    <>
+    <Fragment>
       <Header />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={localStorage.getItem('refreshToken') ? <HomePage /> : <LoginPage />} />
-        <Route path="/register" element={localStorage.getItem('refreshToken') ? <HomePage /> : <SignUpPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </>
+      <div className="app_content">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={localStorage.getItem('refreshToken') ? <HomePage /> : <LoginPage />} />
+          <Route path="/register" element={localStorage.getItem('refreshToken') ? <HomePage /> : <SignUpPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </div>
+    </Fragment>
   );
 }
 

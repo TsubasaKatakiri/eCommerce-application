@@ -3,6 +3,7 @@ import { useAppDispatch } from '../../store/hooks';
 import { logout } from '../../store/auth-slice';
 import { clearUser } from '../../store/user-slice';
 import type { ReactElement } from 'react';
+import './header.css';
 
 const Header: React.FC = (): ReactElement => {
   const navigate = useNavigate();
@@ -17,11 +18,11 @@ const Header: React.FC = (): ReactElement => {
 
   return (
     <header className="header">
-      <Link to="/" className="logo">
+      <Link to="/" className="header_logo">
         Ecommerce-logo
       </Link>
 
-      <nav className="nav">
+      <nav className="header_nav">
         {isAuthenticated ? (
           <button onClick={handleLogout} className="logout-button">
             Logout
