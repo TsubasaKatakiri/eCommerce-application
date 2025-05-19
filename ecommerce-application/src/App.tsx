@@ -1,22 +1,73 @@
-import './App.css'
+import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import Header from './header';
+import Header from './components/header/header';
 
-import RegistrationPage from './register';
-import LoginPage from './loginPage';
-import HomePage from './homePage';
+import LoginPage from './pages/login/login-page';
+import SignUpPage from './pages/signup/sign-up-page';
+import type { ReactElement } from 'react';
+import { useEffect } from 'react';
+import { useAppDispatch } from './store/hooks';
+import type { Dispatch, UnknownAction } from '@reduxjs/toolkit';
+import { refreshAccessToken } from './api/refresh-token';
+import { login, logout } from './store/auth-slice';
+import HomePage from './pages/home/home-page';
+import NotFoundPage from './pages/not-found/not-found-page';
 
-function App() {
+function App(): ReactElement {
+  const dispatch = useAppDispatch();
+
+  const authHost = import.meta.env.VITE_AUTH_HOST;
+  const projectKey = import.meta.env.VITE_PROJECT_KEY;
+  const clientId = import.meta.env.VITE_CLIENT_ID;
+  const clientSecret = import.meta.env.VITE_CLIENT_SECRET;
+
+  async function getAnonymousToken(): Promise<void> {
+    const response = await fetch(`${authHost}oauth/${projectKey}/anonymous/token`, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + btoa(`${clientId}:${clientSecret}`),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `grant_type=client_credentials&scope=manage_my_profile:${projectKey}`,
+    });
+    const tokenData = await response.json();
+    localStorage.setItem('anonymousToken', tokenData.access_token);
+  }
+
+  useEffect(() => {
+    const anonymousToken = localStorage.getItem('anonymousToken');
+    if (!anonymousToken) getAnonymousToken();
+  }, []);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    const accessTokenBestBefore = localStorage.getItem('accessTokenBestBefore');
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (refreshToken && (!accessToken || !accessTokenBestBefore || +accessTokenBestBefore <= Date.now())) {
+      refreshTokens(refreshToken, dispatch);
+    }
+  });
+
   return (
     <>
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegistrationPage />} />
+        <Route path="/login" element={localStorage.getItem('refreshToken') ? <HomePage /> : <LoginPage />} />
+        <Route path="/register" element={localStorage.getItem('refreshToken') ? <HomePage /> : <SignUpPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );
 }
 
 export default App;
+
+async function refreshTokens(refreshToken: string, dispatch: Dispatch<UnknownAction>): Promise<void> {
+  try {
+    const tokens = await refreshAccessToken(refreshToken);
+    dispatch(login({ accessToken: tokens.accessToken, refreshToken: tokens.refreshToken }));
+  } catch {
+    dispatch(logout());
+  }
+}
