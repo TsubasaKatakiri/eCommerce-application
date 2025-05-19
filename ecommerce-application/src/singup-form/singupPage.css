@@ -102,7 +102,7 @@ singup-form__register{
 
 .singup-form__address{
 	display: flex;
-	align-items: flex-start;
+	align-items: stretch;
 	justify-content: space-around;
 }
 

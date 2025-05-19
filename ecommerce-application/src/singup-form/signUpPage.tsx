@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState} from 'react'
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import './singupPage.css';
@@ -21,24 +21,7 @@ type Data={
 	shippingStreet: string,
 	shippingValue: string
 }
-/*
-const clientId: string ="YoiwRaSBvj3yNdFx2Wu_vYgy"
-const clientSecret: string = "BHH278dO3Zv2kGDhjmBo_lD3zTxsdmkU"
-const projectKey: string = "tsukisakura"
 
-async function getAnonymousToken(): Promise<void> {
-	const response = await fetch('https://auth.europe-west1.gcp.commercetools.com/oauth/tsukisakura/anonymous/token',
-		{	method: 'POST',
-		headers: {
-			'Authorization': 'Basic ' + btoa(`${clientId}:${clientSecret}`),
-			'Content-Type': 'application/x-www-form-urlencoded'
-		},
-		body: `grant_type= client_credentials&scope=manage_my_profile:${projectKey}`
-	});
-	const tokenData = await response.json();
-	localStorage.setItem('anonymousToken', tokenData.access_token);
-}
-*/
 const SignUpPage = () => {
     const {
 				register,
@@ -59,15 +42,19 @@ const SignUpPage = () => {
 			const [commonAddress, setcommonAddress] = useState<boolean>(false);
 			const [showPassword,setShowPassword] = useState<boolean>(false)
 			
-			const countries: ((number|string)[])[] = [['Germany',
-					 5], ['United States', 5], ['Russia', 6], ['Belarus', 6], ['France', 5], ['Spain',5]];
+			const countries: ((string)[])[] = [['Germany',
+					 '5'], ['United States', '5'], ['Russia', '6'], ['Belarus', '6'], ['France',' 5'], ['Spain','5']];
 	 
-			let options = countries.map((country, index) => {
+			let optionsBilling = countries.map((country, index) => {
 				return ( 
-					<option className="singup-form__option" value={country[index]} key={index}>{countries[index][0]}</option> 
+					<option className="singup-form__option" value={country} key={index}>{countries[index][0]}</option> 
 				)
 			});
-	
+			let optionsShipping = countries.map((country, index) => {
+				return ( 
+					<option className="singup-form__option" value={country} key={index}>{countries[index][0]}</option> 
+				)
+			});
 			return (
 				<div>
 					<Link to="/" className="singup-form__label">go back to the main page</Link>
@@ -182,7 +169,7 @@ const SignUpPage = () => {
 						<label className='singup-form__label'>Country</label>
 						<div className='singup-form__input-group'>
 						<select className='singup-form__select' value={billingValue} {...register('billingValue')} onChange={(event) => setbillingValue(event.target.value)}>
-							{options}
+							{optionsBilling}
 						</select>
 						</div>
 					</div>
@@ -190,12 +177,12 @@ const SignUpPage = () => {
 					<div className="singup-form__group">
 					<label className='singup-form__label'>Postal</label>
 						<div className='singup-form__input-group'>
-							<input className='singup-form__input' placeholder="postal" {...register('billingPostal', { pattern:/^[0-9].{5}$/, required: true })} /> 
+							<input className='singup-form__input' placeholder="postal" {...register('billingPostal', { pattern: (+billingValue[billingValue.length - 1])===5 ? /^[0-9]{5}$/: /^[0-9]{6}$/, required: true })} /> 
 							{errors.billingPostal?.type === "required" && (
 								<p className="singup-form__error">postal is required.</p>
 							)}
 							{errors.billingPostal?.type === "pattern" && (
-								<p className="singup-form__error">The postal must contain {billingValue} digits</p>
+								<p className="singup-form__error">The postal {billingValue.slice(0, -3)} must contain {billingValue[billingValue.length - 1]} digits</p>
 							)}	
 								</div>
 						</div>
@@ -242,7 +229,7 @@ const SignUpPage = () => {
 					<label className='singup-form__label'>Country</label>
 					<div className='singup-form__input-group'>
 					<select className='singup-form__select' value={shippingValue} {...register('shippingValue')} onChange={(event) => setshippingValue(event.target.value)}>
-					{options}
+					{optionsShipping}
 					</select>
 					</div>
 				 </div>
@@ -250,12 +237,12 @@ const SignUpPage = () => {
 				 <div className="singup-form__group">
 					<label className='singup-form__label'>Postal</label>
 					<div className='singup-form__input-group'>
-					<input className='singup-form__input' placeholder="postal" {...register('shippingPostal', { pattern:/^[0-9].{5}$/, required: true })} /> 
+					<input className='singup-form__input' placeholder="postal" {...register('shippingPostal', {  pattern: (+shippingValue[shippingValue.length - 1])===5 ? /^[0-9]{5}$/: /^[0-9]{6}$/, required: true })} /> 
 					{errors.shippingPostal?.type === "required" && (
 								<p className="singup-form__error">postal is required.</p>
 							)}
 							{errors.shippingPostal?.type === "pattern" && (
-								<p className="singup-form__error">The postal must contain {shippingValue} digits</p>
+								<p className="singup-form__error">The postal {shippingValue.slice(0, -3)} must contain {shippingValue[shippingValue.length - 1]} digits</p>
 							)}	
 					</div>
 				 </div>
@@ -285,6 +272,7 @@ const SignUpPage = () => {
 			 );
 }
 
+/*
 export const addCustomer = async function (customer: Data) {
 	 fetch('https://api.europe-west1.gcp.commercetools.com/tsukisakura/customers', {
 			method: 'POST', 
@@ -302,6 +290,6 @@ export const addCustomer = async function (customer: Data) {
 			}
 		)
 };
-
+*/
 
 export default SignUpPage;
