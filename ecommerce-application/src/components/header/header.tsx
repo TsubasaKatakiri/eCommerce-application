@@ -1,11 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { logout } from '../../store/auth-slice';
 import { clearUser } from '../../store/user-slice';
 import type { ReactElement } from 'react';
 import './header.css';
 
 const Header: React.FC = (): ReactElement => {
+  const customer = useAppSelector((store) => store.user)
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem('refreshToken');
   const dispatch = useAppDispatch();
@@ -24,15 +25,18 @@ const Header: React.FC = (): ReactElement => {
 
       <nav className="header_nav">
         {isAuthenticated ? (
-          <button onClick={handleLogout} className="logout-button">
-            Logout
-          </button>
+          <div className='header_user'>
+            <span className='header_username'>{customer.customer?.firstName} {customer.customer?.lastName}</span>
+            <button onClick={handleLogout} className="navigate_button">
+              Logout
+            </button>
+          </div>
         ) : (
           <>
-            <button onClick={() => navigate('/login')} className="navigate-button">
+            <button onClick={() => navigate('/login')} className="navigate_button">
               Login
             </button>
-            <button onClick={() => navigate('/register')} className="navigate-button">
+            <button onClick={() => navigate('/register')} className="navigate_button">
               Sign Up
             </button>
           </>
