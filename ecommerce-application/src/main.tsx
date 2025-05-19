@@ -14,4 +14,8 @@ createRoot(document.querySelector('#root')!).render(
       </BrowserRouter>
     </Provider>
   </StrictMode>,
+<<<<<<< HEAD
 );
+=======
+)
+>>>>>>> 6713dd61ead562371ccbc7f74440a76abc5aaffb
