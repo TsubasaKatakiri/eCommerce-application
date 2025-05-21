@@ -8,13 +8,13 @@
 }
 
 .singup-form__wrapper {
-  width: 70%;
+  width: 100%;
+  max-width: 768px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  margin: auto;
-  gap: 20px;
+  gap: 10px;
 }
 
 .singup-form__title {
@@ -28,7 +28,7 @@
   margin: 10px auto;
 }
 
-singup-form__register {
+.singup-form__register {
   font-weight: 400;
   font-size: 18px;
   line-height: 20px;
@@ -40,24 +40,43 @@ singup-form__register {
 }
 
 .singup-form__group {
-  width: 60%;
+  width: 100%;
   min-height: 50px;
   display: flex;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   justify-content: center;
   gap: 5px;
 }
 
 .singup-form__input-group {
-  width: 70%;
+  width: calc(100% - 80px);
 }
 
 .singup-form__input-password {
   display: flex;
+  position: relative;
+}
+
+.signup-form_password-button {
+  border: 0;
+  outline: 0;
+  background-color: transparent;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+}
+
+.signup-form_password-button:focus {
+  outline: 0;
 }
 
 .singup-form__label {
-  width: 30%;
+  width: 80px;
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
@@ -77,7 +96,7 @@ singup-form__register {
 
 .singup-form__input,
 .singup-form__select {
-  width: 90%;
+  width: 100%;
   outline: none;
   padding: 10px;
   font-size: 14px;
@@ -109,16 +128,20 @@ singup-form__register {
 }
 
 .singup-form__address {
+  width: 100%;
   display: flex;
-  align-items: stretch;
-  justify-content: space-around;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .singup-form__fielset {
-  width: 45%;
+  width: calc((100% / 2) - 10px);
   display: flex;
-  align-items: stretch;
   flex-direction: column;
+  align-items: center;
+  padding: 10px;
 }
 
 .singup-form__fielset .singup-form__group {
@@ -126,7 +149,7 @@ singup-form__register {
 }
 
 .singup-form__fielset .singup-form__input {
-  width: 90%;
+  width: 100%;
 }
 .singup-form__legend {
   font-weight: 400;
@@ -217,4 +240,14 @@ singup-form__register {
 .singup-form__group-commonaddress {
   width: auto;
   margin: 10 auto;
+}
+
+@media screen and (max-width: 576px) {
+  .singup-form__address {
+    flex-direction: column;
+  }
+
+  .singup-form__fielset {
+    width: 100%;
+  }
 }

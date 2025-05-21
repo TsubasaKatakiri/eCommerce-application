@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import './login-page.css';
 import LoginForm from '../../components/login-form/login-form';
+import type { ReactElement } from 'react';
 
-const LoginPage: React.FC = () => {
+const LoginPage = (): ReactElement => {
   const navigate = useNavigate();
 
   return (
