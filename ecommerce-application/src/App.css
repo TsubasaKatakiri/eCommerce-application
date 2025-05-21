@@ -10,8 +10,7 @@
   padding: 24px;
 }
 
-
-@media screen and (max-width: 640px){
+@media screen and (max-width: 640px) {
   .app_content {
     width: 100%;
     height: 100%;

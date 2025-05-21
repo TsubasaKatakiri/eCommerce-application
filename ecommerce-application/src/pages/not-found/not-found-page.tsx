@@ -1,8 +1,9 @@
 import './not-found-page.css';
 import splash from '../../assets/splash/00054-3537907931.png';
 import { useNavigate } from 'react-router-dom';
+import type { ReactElement } from 'react';
 
-const NotFoundPage: React.FC = () => {
+const NotFoundPage = (): ReactElement => {
   const navigate = useNavigate();
 
   return (

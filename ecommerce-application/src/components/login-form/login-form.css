@@ -76,3 +76,25 @@
   color: #ffffff;
   cursor: default;
 }
+
+.login-form_password-input {
+  width: 100%;
+  position: relative;
+}
+
+.login-form_password-visible-button {
+  border: 0;
+  outline: 0;
+  background-color: transparent;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+}
+
+.login-form_password-visible-button:focus {
+  outline: 0;
+}

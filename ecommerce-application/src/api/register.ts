@@ -17,7 +17,7 @@ export const registerUser = async (data: Data): Promise<CustomerSignInResult> =>
     streetName: data.billingStreet,
     postalCode: data.billingPostal.toString(),
     city: data.billingCity,
-  }
+  };
 
   const shippingAddress: BaseAddress = {
     country: getCountryCode(data.shippingValue),
@@ -26,7 +26,7 @@ export const registerUser = async (data: Data): Promise<CustomerSignInResult> =>
     streetName: data.shippingStreet,
     postalCode: data.shippingPostal.toString(),
     city: data.shippingCity,
-  }
+  };
 
   const customerDraft: CustomerDraft = {
     email: data.email,
@@ -51,7 +51,7 @@ export const registerUser = async (data: Data): Promise<CustomerSignInResult> =>
       const result: CustomerSignInResult = await response.json();
       return result;
     } else {
-      throw new Error(`Registration failed`)
+      throw new Error(`Registration failed`);
     }
   } catch {
     throw new Error('An error occurred. Please try again.');
@@ -59,33 +59,33 @@ export const registerUser = async (data: Data): Promise<CustomerSignInResult> =>
 };
 
 function getCountryCode(data: string): string {
-    const country: string = data.split(',')[0];
-    let value: string = '';
-    switch(country){
-        case 'United States': {
-            value='US';
-            break;
-        }
-        case 'Germany': {
-            value='DE';
-            break;
-        }
-        case 'Russia': {
-            value='RU';
-            break;
-        }
-        case 'Belarus': {
-            value='BY';
-            break;
-        }
-        case 'France': {
-            value='FR';
-            break;
-        }
-        case 'Spain': {
-            value='ES';
-            break;
-        }
+  const country: string = data.split(',')[0];
+  let value: string = '';
+  switch (country) {
+    case 'United States': {
+      value = 'US';
+      break;
     }
-    return value;
+    case 'Germany': {
+      value = 'DE';
+      break;
+    }
+    case 'Russia': {
+      value = 'RU';
+      break;
+    }
+    case 'Belarus': {
+      value = 'BY';
+      break;
+    }
+    case 'France': {
+      value = 'FR';
+      break;
+    }
+    case 'Spain': {
+      value = 'ES';
+      break;
+    }
+  }
+  return value;
 }

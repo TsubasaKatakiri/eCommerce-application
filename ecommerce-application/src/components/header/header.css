@@ -6,6 +6,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
 
 .header_logo {
@@ -30,7 +31,7 @@
   gap: 20px;
 }
 
-.header_user{
+.header_user {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -38,11 +39,47 @@
   gap: 20px;
 }
 
-.header_username{
+.header_username {
   font-weight: 600;
 }
 
-@media screen and (max-width: 640px){
+.nav__button_primary {
+  background-color: #ff3d9e;
+  border: 1px solid #ff3d9e;
+  border-radius: 5px;
+  outline: 0;
+  color: #ffffff;
+  cursor: pointer;
+  transition:
+    color 0.25s linear,
+    background-color 0.25s linear;
+}
+
+.nav__button_primary:hover {
+  border: 1px solid #ff3d9e;
+  background-color: #ffffff;
+  color: #ff3d9e;
+}
+
+.nav__button_secondary {
+  background-color: #ffffff;
+  border: 1px solid #ff3d9e;
+  border-radius: 5px;
+  outline: 0;
+  color: #ff3d9e;
+  cursor: pointer;
+  transition:
+    color 0.25s linear,
+    background-color 0.25s linear;
+}
+
+.nav__button_secondary:hover {
+  border: 1px solid #ff3d9e;
+  background-color: #ff3d9e;
+  color: #ffffff;
+}
+
+@media screen and (max-width: 640px) {
   .header {
     height: 48px;
     padding: 10px 8px;
@@ -59,7 +96,8 @@
     gap: 8px;
   }
 
-  .navigate_button{
+  .nav__button_primary,
+  .nav__button_secondary {
     padding: 5px 10px;
     font-size: 14px;
   }
