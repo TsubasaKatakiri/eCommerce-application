@@ -1,15 +1,11 @@
 import './app.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/header/header';
 
-<<<<<<< HEAD
-import LoginPage from './loginPage'
-import SignUpPage from './singUp-form/signUpPage'
-=======
 import LoginPage from './pages/login/login-page';
 import SignUpPage from './pages/signup/sign-up-page';
 import type { ReactElement } from 'react';
-import { Fragment, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAppDispatch } from './store/hooks';
 import type { Dispatch, UnknownAction } from '@reduxjs/toolkit';
 import { refreshAccessToken } from './api/refresh-token';
@@ -35,11 +31,11 @@ function App(): ReactElement {
       body: `grant_type=client_credentials&scope=manage_my_profile:${projectKey}`,
     });
     const tokenData = await response.json();
-    localStorage.setItem('anonymousToken', tokenData.access_token);
+    sessionStorage.setItem('anonymousToken', tokenData.access_token);
   }
 
   useEffect(() => {
-    const anonymousToken = localStorage.getItem('anonymousToken');
+    const anonymousToken = sessionStorage.getItem('anonymousToken');
     if (!anonymousToken) getAnonymousToken();
   }, []);
 
@@ -51,20 +47,22 @@ function App(): ReactElement {
       refreshTokens(refreshToken, dispatch);
     }
   });
->>>>>>> 959ba68d296f6f93269e336a25fa517376f81949
 
   return (
-    <Fragment>
+    <>
       <Header />
       <div className="app_content">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={localStorage.getItem('refreshToken') ? <HomePage /> : <LoginPage />} />
-          <Route path="/register" element={localStorage.getItem('refreshToken') ? <HomePage /> : <SignUpPage />} />
+          <Route path="/login" element={localStorage.getItem('refreshToken') ? <Navigate to="/" /> : <LoginPage />} />
+          <Route
+            path="/register"
+            element={localStorage.getItem('refreshToken') ? <Navigate to="/" /> : <SignUpPage />}
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
-    </Fragment>
+    </>
   );
 }
 

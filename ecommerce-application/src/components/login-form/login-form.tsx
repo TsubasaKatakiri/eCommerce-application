@@ -1,16 +1,24 @@
 import { useState } from 'react';
+import type { ReactElement } from 'react';
 import './login-form.css';
 import { useAppDispatch } from '../../store/hooks';
 import { loginUser } from '../../api/login';
+import EyeClosed from '../../assets/svg/eye-see.svg?react';
+import Eye from '../../assets/svg/eye-show.svg?react';
+import { useNavigate } from 'react-router-dom';
 
-const LoginForm: React.FC = () => {
+const LoginForm = (): ReactElement => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
   const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
   const [formError, setFormError] = useState<string | undefined>();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const onSubmit = async (event: React.FormEvent): Promise<void> => {
     event.preventDefault();
@@ -22,7 +30,7 @@ const LoginForm: React.FC = () => {
     try {
       await loginUser(email, password, dispatch);
       setFormError(undefined);
-      history.go(-1);
+      navigate('/');
     } catch {
       setFormError('Incorrect email or password');
     } finally {
@@ -30,16 +38,21 @@ const LoginForm: React.FC = () => {
     }
   };
 
-  const handleEmailChange = (error: React.ChangeEvent<HTMLInputElement>): void => {
-    setEmail(error.target.value);
-    if (error.target.value.length === 0) setEmailError('Email is required');
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setEmail(event.target.value);
+    if (event.target.value.length === 0) setEmailError('Email is required');
+    if (EMAIL_REGEX.test(event.target.value) === false) setEmailError('Email is incorrect');
     else setEmailError('');
   };
 
-  const handlePasswordChange = (error: React.ChangeEvent<HTMLInputElement>): void => {
-    setPassword(error.target.value);
-    if (error.target.value.length === 0) setPasswordError('Password is required');
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setPassword(event.target.value);
+    if (event.target.value.length === 0) setPasswordError('Password is required');
     else setPasswordError('');
+  };
+
+  const handlePasswordVisibility = (): void => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -63,14 +76,19 @@ const LoginForm: React.FC = () => {
         <label htmlFor="password" className="login-form_label">
           Password
         </label>
-        <input
-          className="login-form_field"
-          type="password"
-          id="password"
-          value={password}
-          onChange={handlePasswordChange}
-          placeholder="Enter your password"
-        />
+        <div className="login-form_password-input">
+          <input
+            className="login-form_field"
+            type={showPassword ? 'text' : 'password'}
+            id="password"
+            value={password}
+            onChange={handlePasswordChange}
+            placeholder="Enter your password"
+          />
+          <button type="button" className="login-form_password-visible-button" onClick={handlePasswordVisibility}>
+            {showPassword ? <Eye width="24px" height="24px" /> : <EyeClosed width="24px" height="24px" />}
+          </button>
+        </div>
         {passwordError !== '' && <span className="login-form_error">{passwordError}</span>}
       </div>
       <button type="submit" disabled={submitDisabled} className="login-form_submit">

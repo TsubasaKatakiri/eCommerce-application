@@ -42,5 +42,5 @@ export default tseslint.config(
       'class-methods-use-this': 'error',
     },
   },
-  { ignores: ['node_modules', 'dist', 'src/vite-env.d.ts'] },
+  { ignores: ['node_modules', 'dist', 'vite.config.d.ts', 'src/vite-env.d.ts'] },
 );
