@@ -42,9 +42,9 @@ const Header = (): ReactElement => {
         <nav className="header_nav">
           {isAuthenticated ? (
             <div className="header_user">
-              <span className="header_username">
+              <Link to='/user' className="header_username">
                 {customer.customer?.firstName} {customer.customer?.lastName}
-              </span>
+              </Link>
               <button onClick={handleLogout} className="nav__button_secondary">
                 Logout
               </button>
