@@ -131,7 +131,7 @@ const PasswordChange = (): ReactElement => {
                 {submitDisabled ? 'Saving...' : 'Save'}
             </button>
 
-            <button type="submit" disabled={submitDisabled} onClick={handleCancel} className="login-form_submit">
+            <button type="button" disabled={submitDisabled} onClick={handleCancel} className="login-form_submit">
                 Cancel
             </button>
         </form>

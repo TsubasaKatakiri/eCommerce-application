@@ -1,4 +1,5 @@
 import PasswordChange from '../password-change/password-change';
+import UserData from '../user-data/user-data';
 import './settings.css'
 
 const Settings = () => {
@@ -7,9 +8,7 @@ const Settings = () => {
             <h2>Settings</h2>
             <div className='settings-section'>
                 <h3>Personal information</h3>
-                <form>
-
-                </form>
+                <UserData/>
             </div>
             <div className='settings-section'>
                 <h3>Password</h3>
