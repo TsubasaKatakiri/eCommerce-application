@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { ReactElement } from 'react';
+import './product-card.css';
 
 interface ProductCardContent {
     id: string;
