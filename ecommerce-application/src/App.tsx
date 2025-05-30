@@ -13,8 +13,13 @@ import { login, logout } from './store/auth-slice';
 import HomePage from './pages/home/home-page';
 import NotFoundPage from './pages/not-found/not-found-page';
 
+import CatalogProductPage from './pages/catalog-products/catalog-product-page';
+import DetailedProductpage from './pages/detailed-product/detailed-product-page';
+import UserProfile from './pages/user-profile/user-profile';
+
 function App(): ReactElement {
   const dispatch = useAppDispatch();
+  const isAuth = !!localStorage.getItem('refreshToken');
 
   const authHost = import.meta.env.VITE_AUTH_HOST;
   const projectKey = import.meta.env.VITE_PROJECT_KEY;
@@ -58,6 +63,16 @@ function App(): ReactElement {
           <Route
             path="/register"
             element={localStorage.getItem('refreshToken') ? <Navigate to="/" /> : <SignUpPage />}
+          />
+          <Route path="/catalog-product-page" element={< CatalogProductPage />} />
+          <Route path="/products/:itemID" element={<DetailedProductpage />} />
+          <Route
+            path="/user-profile"
+            element={isAuth ? (
+              <UserProfile />
+            ) : (
+              <Navigate to="/login" replace />
+            )}
           />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
