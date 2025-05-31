@@ -8,8 +8,6 @@ const UserPage = () => {
     const location = useLocation();
     const currentPath: string | undefined = location.pathname.split('/').filter(item => item !== '')[1];
 
-    console.log(customer);
-
     return (
         <div className='user-page_wrapper'>
             <div className='user-page_user-info'>

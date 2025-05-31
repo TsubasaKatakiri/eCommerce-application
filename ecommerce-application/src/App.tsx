@@ -6,7 +6,7 @@ import LoginPage from './pages/login/login-page';
 import SignUpPage from './pages/signup/sign-up-page';
 import type { ReactElement } from 'react';
 import { useEffect } from 'react';
-import { useAppDispatch } from './store/hooks';
+import { useAppDispatch, useAppSelector } from './store/hooks';
 import type { Dispatch, UnknownAction } from '@reduxjs/toolkit';
 import { refreshAccessToken } from './api/refresh-token';
 import { login, logout } from './store/auth-slice';
@@ -16,8 +16,10 @@ import UserPage from './pages/user/user-page';
 import PagePlaceholder from './components/page-placeholder/page-placeholder';
 import Settings from './components/settings/settings';
 import Addresses from './components/addresses/addresses';
+import Toast from './components/toast/toast';
 
 function App(): ReactElement {
+  const toast = useAppSelector((state) => state.toast);
   const dispatch = useAppDispatch();
 
   const authHost = import.meta.env.VITE_AUTH_HOST;
@@ -54,6 +56,9 @@ function App(): ReactElement {
 
   return (
     <>
+      {toast.isVisible && (
+        <Toast status={toast.status} text={toast.text} />
+      )}
       <Header />
       <div className="app_content">
         <Routes>
