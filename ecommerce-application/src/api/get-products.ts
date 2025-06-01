@@ -1,4 +1,4 @@
-import type { Product } from "@commercetools/platform-sdk";
+import type { ProductPagedQueryResponse } from "@commercetools/platform-sdk";
 import type { Dispatch, UnknownAction } from "@reduxjs/toolkit";
 import { setProducts } from "../store/product-slice";
 
@@ -20,6 +20,6 @@ export const getProducts = async (dispatch: Dispatch<UnknownAction>): Promise<vo
   if (!response.ok) {
     throw new Error('Failed to get products');
   }
-  const productData: Product[] = await response.json();
-  dispatch(setProducts({ products: productData }));
+  const productData:ProductPagedQueryResponse = await response.json();
+  dispatch(setProducts({ products: productData.results }));
 };

@@ -27,8 +27,11 @@ export const productSlice = createSlice({
     setCurrentProduct: (state, { payload }: PayloadAction<{currentProduct: Product}>) => {
         state.currentProduct = payload.currentProduct;  
     },
+    unsetCurrentProduct: (state) => {
+        state.currentProduct = undefined;  
+    },
   },
 });
 
-export const { setProducts, setCategories, setCurrentProduct } = productSlice.actions;
+export const { setProducts, setCategories, setCurrentProduct, unsetCurrentProduct } = productSlice.actions;
 export default productSlice.reducer;
