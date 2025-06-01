@@ -81,7 +81,7 @@ const AddressModal: React.FC<Properties> = ({onClose, editingAddress, customer}:
         setLastName(event.target.value);
         const lastNameRegex = /^[A-Za-z\s-/]+$/;
         if(event.target.value.length === 0) setLastNameError('Must contain at least one character');
-        else if (lastNameRegex.test(event.target.value) === false) setFirstNameError('Must contain no special characters or numbers');
+        else if (lastNameRegex.test(event.target.value) === false) setLastNameError('Must contain no special characters or numbers');
         else setLastNameError(undefined);
     }
 

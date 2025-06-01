@@ -17,6 +17,7 @@ import PagePlaceholder from './components/page-placeholder/page-placeholder';
 import Settings from './components/settings/settings';
 import Addresses from './components/addresses/addresses';
 import Toast from './components/toast/toast';
+import ProductPage from './pages/product/product-page';
 
 function App(): ReactElement {
   const toast = useAppSelector((state) => state.toast);
@@ -63,6 +64,7 @@ function App(): ReactElement {
       <div className="app_content">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/login" element={localStorage.getItem('refreshToken') ? <Navigate to="/" /> : <LoginPage />} />
           <Route
             path="/register"
