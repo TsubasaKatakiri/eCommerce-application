@@ -1,4 +1,4 @@
-import type { Category } from "@commercetools/platform-sdk";
+import type { CategoryPagedQueryResponse } from "@commercetools/platform-sdk";
 import type { Dispatch, UnknownAction } from "@reduxjs/toolkit";
 import { setCategories } from "../store/product-slice";
 
@@ -23,6 +23,6 @@ export const getCategories = async (dispatch: Dispatch<UnknownAction>): Promise<
   if (!response.ok) {
     throw new Error('Failed to get categories');
   }
-  const categoryData: Category[] = await response.json();
-  dispatch(setCategories({ categories: categoryData }));
+  const categoryData: CategoryPagedQueryResponse = await response.json();
+  dispatch(setCategories({ categories: categoryData.results }));
 };

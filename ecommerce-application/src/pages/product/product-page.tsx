@@ -3,10 +3,12 @@ import './product-page.css';
 import { ReactElement, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getProductById } from '../../api/get-product-by-id';
-import { Image, ProductVariant } from '@commercetools/platform-sdk';
+import { Category, CategoryReference, Image, ProductVariant } from '@commercetools/platform-sdk';
+import { getCategories } from '../../api/get-categories';
+import Slider from '../../components/slider/slider';
 
 const ProductPage: React.FC = () => {
-    const {currentProduct} = useAppSelector(state => state.product);
+    const {currentProduct, categories} = useAppSelector(state => state.product);
     const dispatch = useAppDispatch();
     const { productId } = useParams();
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -16,12 +18,17 @@ const ProductPage: React.FC = () => {
     const [selectedVariant, setSelectedVariant] = useState<ProductVariant>();
     const [images, setImages] = useState<Image[]>([]);
     const [price, setPrice] = useState<string>();
+    const [category, setCategory] = useState<string[]>([]);
+    const [imageSet, setImageSet] = useState<Image[]>([]);
 
     useEffect(() => {
         setIsError(false);
         if(productId){
             try {
                 getProductById(productId, dispatch);
+                if(categories.length === 0){
+                    getCategories(dispatch);
+                }
             } catch (error) {
                 console.log('fail');
                 setIsError(true);
@@ -40,7 +47,7 @@ const ProductPage: React.FC = () => {
             setVariantData(allVariants);
             setSelectedVariant(allVariants[0]);
             const radioSwitches:ReactElement[] = [];
-            allVariants.forEach((item, index) => {
+            allVariants.forEach((item) => {
                 const element: ReactElement = (
                     <label htmlFor={`${item.key}`} className='product_variant' key={item.key}>
                         {item.images && <img src={item.images[0].url} alt='' className='product_variant-img'/>}
@@ -62,7 +69,33 @@ const ProductPage: React.FC = () => {
                 setPrice(`${currentPrice.value.currencyCode} ${(currentPrice.value.centAmount / 100).toFixed(2)}`);
             }
         }
-    }, [selectedVariant])
+    }, [selectedVariant]);
+
+    useEffect(() => {
+        if(variantData){
+            const images: Image[] = [];
+            variantData.forEach(item => {
+                if(item.images){
+                    item.images.forEach(img => images.push(img))
+                }
+            })
+            setImageSet(images);
+        }
+    }, [variantData])
+
+    console.log(imageSet);
+
+    useEffect(() => {
+        if(currentProduct && categories.length > 0){
+            const productCategories: CategoryReference[] = currentProduct.masterData.staged.categories;
+            const categoryNames: string[] = productCategories.map(item => {
+                const categoryObject: Category | undefined = categories.find(cat => cat.id === item.id);
+                if(categoryObject) return categoryObject.name['en-US'];
+                else return ''
+            })
+            setCategory(categoryNames.filter(item => item !== ''));
+        }
+    }, [currentProduct, categories])
 
     return (
         <div className='product_wrapper'>
@@ -71,10 +104,11 @@ const ProductPage: React.FC = () => {
                     <div className='product_header'>
                         <div className='product_images'>
                             {images.length > 0 
-                            ? <img src={images[0].url} alt={'image'} className='product_image'/>
+                            ? <Slider images={imageSet}/>
                             : <div>No image</div>}
                         </div>
                         <div className='product_data'>
+                            <p className='product_category'>{category.join(', ')}</p>
                             <h3 className='product_name'>
                                 {currentProduct.masterData.staged.name
                                 ? currentProduct.masterData.staged.name['en-US']
