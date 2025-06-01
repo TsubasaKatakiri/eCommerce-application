@@ -8,9 +8,6 @@ export const getCategories = async (dispatch: Dispatch<UnknownAction>): Promise<
 
   const token = localStorage.getItem('accessToken');
   if(!token) throw new Error('Invalid token');
-  // let token = localStorage.getItem('accessToken');
-  // if(token === undefined) token = localStorage.getItem('anonymousToken');
-  // else throw new Error('Invalid token');
 
   const url = `${apiHost}${projectKey}/categories`;
   const response = await fetch(url, {

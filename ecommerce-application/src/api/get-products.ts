@@ -8,9 +8,6 @@ export const getProducts = async (dispatch: Dispatch<UnknownAction>): Promise<vo
 
   const token = localStorage.getItem('accessToken');
   if(!token) throw new Error('Invalid token');
-//   let token = localStorage.getItem('accessToken');
-//   if(token === undefined) token = localStorage.getItem('anonymousToken');
-//   else throw new Error('Invalid token');
 
   const url = `${apiHost}${projectKey}/products`
   const response = await fetch(url, {

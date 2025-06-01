@@ -8,8 +8,6 @@ export const getProductById = async (id: string, dispatch: Dispatch<UnknownActio
 
   const token = localStorage.getItem('accessToken');
   if(!token) throw new Error('Invalid token');
-  // if(token === undefined) token = localStorage.getItem('anonymousToken');
-  // else throw new Error('Invalid token');
 
   const url = `${apiHost}${projectKey}/products/${id}`
   const response = await fetch(url, {
@@ -19,6 +17,7 @@ export const getProductById = async (id: string, dispatch: Dispatch<UnknownActio
     },
   });
 
+  console.log(response);
   if (!response.ok) {
     throw new Error('Failed to get product');
   }

@@ -18,6 +18,7 @@ import Settings from './components/settings/settings';
 import Addresses from './components/addresses/addresses';
 import Toast from './components/toast/toast';
 import ProductPage from './pages/product/product-page';
+import { loginUnauthorizedUser } from './api/unauthorized-login';
 
 function App(): ReactElement {
   const toast = useAppSelector((state) => state.toast);
@@ -39,6 +40,7 @@ function App(): ReactElement {
     });
     const tokenData = await response.json();
     sessionStorage.setItem('anonymousToken', tokenData.access_token);
+    await loginUnauthorizedUser();
   }
 
   useEffect(() => {
