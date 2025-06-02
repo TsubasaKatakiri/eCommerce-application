@@ -7,6 +7,7 @@ import { Category, CategoryReference, Image, ProductVariant } from '@commercetoo
 import { getCategories } from '../../api/get-categories';
 import Slider from '../../components/slider/slider';
 import { unsetCurrentProduct } from '../../store/product-slice';
+import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 
 const ProductPage: React.FC = () => {
     const {currentProduct, categories} = useAppSelector(state => state.product);
@@ -22,21 +23,30 @@ const ProductPage: React.FC = () => {
     const [category, setCategory] = useState<string[]>([]);
     const [imageSet, setImageSet] = useState<Image[]>([]);
 
+    const getData = async(): Promise<void> => {
+        if(productId){
+         try {
+            getProductById(productId, dispatch);
+            if(categories.length === 0){
+                getCategories(dispatch);
+            }
+          } catch {
+            setIsError(true);
+          } finally {
+            setIsLoading(false);
+          }
+        }
+      }
+
     useEffect(() => {
         setIsError(false);
-        if(productId){
-            try {
-                getProductById(productId, dispatch);
-                if(categories.length === 0){
-                    getCategories(dispatch);
-                }
-            } catch (error) {
-                console.log('fail');
-                setIsError(true);
-            } finally {
-                setIsLoading(false);
-            }
-        }
+        const token = localStorage.getItem('accessToken');
+        if(!token){
+            loginUnauthorizedUser()
+            .then(() => getData())
+            .catch(() => setIsError(true))
+            .finally(() => setIsLoading(false))
+        } else getData();
         return () => dispatch(unsetCurrentProduct());
     }, [productId]);
 

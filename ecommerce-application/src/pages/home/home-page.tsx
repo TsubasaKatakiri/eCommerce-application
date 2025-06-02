@@ -5,6 +5,7 @@ import { getProducts } from '../../api/get-products';
 import { getCategories } from '../../api/get-categories';
 import ProductCard from '../../components/product-card/product-card';
 import { Category, Product } from '@commercetools/platform-sdk';
+import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 
 const HomePage: React.FC = () => {
   const {products, categories} = useAppSelector(state => state.product);
@@ -14,16 +15,26 @@ const HomePage: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const [category, setCategory] = useState<Category | undefined>();
 
+  const getData = async(): Promise<void> => {
+     try {
+        getProducts(dispatch);
+        getCategories(dispatch);
+      } catch {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+  }
+
   useEffect(() => {
     setLoading(true);
-    try {
-      getProducts(dispatch);
-      getCategories(dispatch);
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
+    const token = localStorage.getItem('accessToken');
+    if(!token){
+      loginUnauthorizedUser()
+      .then(() => getData())
+      .catch(() => setError(true))
+      .finally(() => setLoading(false))
+    } else getData();
   }, [])
 
   useEffect(() => {
@@ -80,3 +91,5 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+
+
