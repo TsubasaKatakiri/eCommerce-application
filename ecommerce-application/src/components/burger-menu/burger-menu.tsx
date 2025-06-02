@@ -6,6 +6,7 @@ import './burger-menu.css';
 import { useScreenSize } from '../../hooks/use-screen-size';
 import { useEffect } from 'react';
 import type { ReactElement } from 'react';
+import { Link } from 'react-router-dom';
 
 interface Properties {
   menuOpen: boolean;
@@ -51,6 +52,9 @@ const BurgerMenu = ({ menuOpen, setMenuOpen }: Properties): ReactElement => {
           <span>
             {customer.customer?.firstName} {customer.customer?.lastName}
           </span>
+          <Link to="/user-profile" className="burger-menu__button_secondary">
+            User profile
+          </Link>
           <button
             className="burger-menu__button_secondary"
             onClick={(): void => {
@@ -83,6 +87,9 @@ const BurgerMenu = ({ menuOpen, setMenuOpen }: Properties): ReactElement => {
           </button>
         </div>
       )}
+      <Link to="/catalog-product-page" className="burger-menu__button_secondary">
+        Catalog product page
+      </Link>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import './app.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/header/header';
+import { useAppSelector } from './store/hooks';
 
 import LoginPage from './pages/login/login-page';
 import SignUpPage from './pages/signup/sign-up-page';
@@ -20,9 +21,14 @@ import Toast from './components/toast/toast';
 import ProductPage from './pages/product/product-page';
 import { loginUnauthorizedUser } from './api/unauthorized-login';
 
+import CatalogProductPage from './pages/catalog-products/catalog-product-page';
+import DetailedProductpage from './pages/detailed-product/detailed-product-page';
+import UserProfile from './pages/user-profile/user-profile';
+
 function App(): ReactElement {
   const toast = useAppSelector((state) => state.toast);
   const dispatch = useAppDispatch();
+  const isAuth = useAppSelector((state) => state.auth.isLoggedIn);
 
   const authHost = import.meta.env.VITE_AUTH_HOST;
   const projectKey = import.meta.env.VITE_PROJECT_KEY;
