@@ -45,12 +45,9 @@ const Header = (): ReactElement => {
           </Link>
           {isAuthenticated ? (
             <div className="header_user">
-              <Link to="/user-profile" className="nav__button_secondary">
-              User profile
-              </Link>
-              <span className="header_username">
+              <Link to='/user' className="header_username">
                 {customer.customer?.firstName} {customer.customer?.lastName}
-              </span>
+              </Link>
               <button onClick={handleLogout} className="nav__button_secondary">
                 Logout
               </button>

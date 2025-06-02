@@ -1,0 +1,59 @@
+.address-card{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #FFFFFF;
+    border: 1px solid #EEEEEE;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.address-card__default{
+    border: 1px solid #c9ffc9;
+    background-color: #c9ffc9;
+}
+
+.address-card_radio{
+    display: flex;
+    align-items: center;
+    height: 150px;
+    padding-right: 10px;
+    margin-right: 10px;
+    border-right: 1px solid #CCCCCC;
+}
+
+.address-card_data{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 4px;
+}
+
+.address-card_buttons{
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.address-card_button{
+    border: 0;
+    outline: 0;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.address-card_button svg{
+    width: 24px;
+    height: 24px;
+}
