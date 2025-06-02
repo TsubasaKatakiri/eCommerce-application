@@ -62,7 +62,7 @@ const ProductPage: React.FC = () => {
             allVariants.forEach((item) => {
                 const element: ReactElement = (
                     <label htmlFor={`${item.key}`} className='product_variant' key={item.key}>
-                        {item.images && <img src={item.images[0].url} alt='' className='product_variant-img'/>}
+                        {item.images && item.images[0] && <img src={item.images[0].url} alt='' className='product_variant-img'/>}
                         <span className='product_variant-text'>{item.key}</span>
                         <input type='radio' name='variant' id={`${item.key}`} value={item.key} className='product_variant-input' onChange={() => setSelectedVariant(item)}/>
                     </label>
