@@ -24,7 +24,7 @@ const CatalogProductPage = (): ReactElement => {
   return (
     <div className="catalog_page">
       <h1>catalog</h1>
-      <div className="products_list">
+      {/* <div className="products_list">
         {allProduct.map((item) => (
           <ProductCard
             id={item.id}
@@ -33,7 +33,7 @@ const CatalogProductPage = (): ReactElement => {
             img={item.img}
           />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
