@@ -1,23 +1,20 @@
 import type { ReactElement } from 'react';
-import ProductCard from '../../components/product-card/product-card';
-import cardImageOne from '../../assets/cards-images/card-one.png';
-import cardImageTwo from '../../assets/cards-images/card-two.png';
 import './catalog-product-page.css'
 
-const allProduct = [
-  {
-    id: '1',
-    cost: '330 руб.',
-    name: 'item first',
-    img: cardImageOne
-  },
-  {
-    id: '2',
-    cost: '440 руб.',
-    name: 'item second',
-    img: cardImageTwo
-  },
-];
+// const allProduct = [
+//   {
+//     id: '1',
+//     cost: '330 руб.',
+//     name: 'item first',
+//     img: cardImageOne
+//   },
+//   {
+//     id: '2',
+//     cost: '440 руб.',
+//     name: 'item second',
+//     img: cardImageTwo
+//   },
+// ];
 
 
 const CatalogProductPage = (): ReactElement => {

@@ -4,7 +4,7 @@ import './home-page.css';
 import { getProducts } from '../../api/get-products';
 import { getCategories } from '../../api/get-categories';
 import ProductCard from '../../components/product-card/product-card';
-import { Category, Product } from '@commercetools/platform-sdk';
+import { Product } from '@commercetools/platform-sdk';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 
 const HomePage: React.FC = () => {
@@ -13,7 +13,7 @@ const HomePage: React.FC = () => {
   const [filtered, setFiltered] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [category, setCategory] = useState<Category | undefined>();
+  // const [category, setCategory] = useState<Category | undefined>();
 
   const getData = async(): Promise<void> => {
      try {

@@ -10,7 +10,6 @@ interface Properties{
 }
 
 const Slider: React.FC<Properties> = ({images}: Properties) => {
-    const [imageSet, setImageSet] = useState<Image[]>(images);
     const [currentImage, setCurrentImage] = useState<Image>(images[0]);
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
     const [modalOpen, setModalOpen] = useState<boolean>(false)
