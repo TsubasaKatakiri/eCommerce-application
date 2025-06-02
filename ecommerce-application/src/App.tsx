@@ -18,6 +18,8 @@ import PagePlaceholder from './components/page-placeholder/page-placeholder';
 import Settings from './components/settings/settings';
 import Addresses from './components/addresses/addresses';
 import Toast from './components/toast/toast';
+import ProductPage from './pages/product/product-page';
+import { loginUnauthorizedUser } from './api/unauthorized-login';
 
 import CatalogProductPage from './pages/catalog-products/catalog-product-page';
 import DetailedProductpage from './pages/detailed-product/detailed-product-page';
@@ -44,6 +46,7 @@ function App(): ReactElement {
     });
     const tokenData = await response.json();
     sessionStorage.setItem('anonymousToken', tokenData.access_token);
+    await loginUnauthorizedUser();
   }
 
   useEffect(() => {
@@ -69,6 +72,7 @@ function App(): ReactElement {
       <div className="app_content">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/login" element={localStorage.getItem('refreshToken') ? <Navigate to="/" /> : <LoginPage />} />
           <Route
             path="/register"

@@ -6,6 +6,7 @@ import { useState, type ReactElement } from 'react';
 import './header.css';
 import BurgerMenu from '../burger-menu/burger-menu';
 import { useScreenSize } from '../../hooks/use-screen-size';
+import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 
 const Header = (): ReactElement => {
   const customer = useAppSelector((store) => store.user);
@@ -16,9 +17,10 @@ const Header = (): ReactElement => {
 
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
-  const handleLogout = (): void => {
+  const handleLogout = async (): Promise<void> => {
     dispatch(logout());
     dispatch(clearUser());
+    await loginUnauthorizedUser();
     location.reload();
   };
 
