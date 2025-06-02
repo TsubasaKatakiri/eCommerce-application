@@ -4,7 +4,7 @@ import Header from './components/header/header';
 import LoginPage from './pages/login/login-page';
 import SignUpPage from './pages/signup/sign-up-page';
 import type { ReactElement } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import type { Dispatch, UnknownAction } from '@reduxjs/toolkit';
 import { refreshAccessToken } from './api/refresh-token';
