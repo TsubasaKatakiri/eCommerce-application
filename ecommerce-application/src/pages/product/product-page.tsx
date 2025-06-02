@@ -47,7 +47,7 @@ const ProductPage: React.FC = () => {
             .catch(() => setIsError(true))
             .finally(() => setIsLoading(false))
         } else getData();
-        return () => dispatch(unsetCurrentProduct());
+        return () => {dispatch(unsetCurrentProduct());}
     }, [productId]);
 
     useEffect(() => {
