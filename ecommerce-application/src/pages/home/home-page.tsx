@@ -6,7 +6,7 @@ import { getCategories } from '../../api/get-categories';
 import ProductCard from '../../components/product-card/product-card';
 import { Product } from '@commercetools/platform-sdk';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
-import { searchProducts } from '../../api/search-products';
+// import { searchProducts } from '../../api/search-products';
 
 const HomePage: React.FC = () => {
   const {products, categories} = useAppSelector(state => state.product);
