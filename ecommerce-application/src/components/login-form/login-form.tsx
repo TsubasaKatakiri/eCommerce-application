@@ -6,6 +6,7 @@ import { loginUser } from '../../api/login';
 import EyeClosed from '../../assets/svg/eye-see.svg?react';
 import Eye from '../../assets/svg/eye-show.svg?react';
 import { useNavigate } from 'react-router-dom';
+import { routeList } from '../../const/routes';
 
 const LoginForm = (): ReactElement => {
   const [email, setEmail] = useState<string>('');
@@ -30,7 +31,7 @@ const LoginForm = (): ReactElement => {
     try {
       await loginUser(email, password, dispatch);
       setFormError(undefined);
-      navigate('/');
+      navigate(routeList.MAIN);
     } catch {
       setFormError('Incorrect email or password');
     } finally {

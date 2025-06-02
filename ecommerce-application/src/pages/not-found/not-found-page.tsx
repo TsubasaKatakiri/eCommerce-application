@@ -2,6 +2,7 @@ import './not-found-page.css';
 import splash from '../../assets/splash/00054-3537907931.png';
 import { useNavigate } from 'react-router-dom';
 import type { ReactElement } from 'react';
+import { routeList } from '../../const/routes';
 
 const NotFoundPage = (): ReactElement => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const NotFoundPage = (): ReactElement => {
             <button className="not-found_button" onClick={() => history.back()}>
               Back
             </button>
-            <button className="not-found_button" onClick={() => navigate('/')}>
+            <button className="not-found_button" onClick={() => navigate(routeList.MAIN)}>
               Home page
             </button>
           </div>

@@ -7,6 +7,7 @@ import './header.css';
 import BurgerMenu from '../burger-menu/burger-menu';
 import { useScreenSize } from '../../hooks/use-screen-size';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
+import { routeList } from '../../const/routes';
 
 const Header = (): ReactElement => {
   const customer = useAppSelector((store) => store.user);
@@ -44,7 +45,7 @@ const Header = (): ReactElement => {
         <nav className="header_nav">
           {isAuthenticated ? (
             <div className="header_user">
-              <Link to='/user' className="header_username">
+              <Link to={routeList.USER} className="header_username">
                 {customer.customer?.firstName} {customer.customer?.lastName}
               </Link>
               <button onClick={handleLogout} className="nav__button_secondary">
@@ -53,10 +54,10 @@ const Header = (): ReactElement => {
             </div>
           ) : (
             <>
-              <button onClick={() => navigate('/login')} className="nav__button_primary">
+              <button onClick={() => navigate(routeList.LOGIN)} className="nav__button_primary">
                 Login
               </button>
-              <button onClick={() => navigate('/register')} className="nav__button_secondary">
+              <button onClick={() => navigate(routeList.REGISTER)} className="nav__button_secondary">
                 Sign Up
               </button>
             </>

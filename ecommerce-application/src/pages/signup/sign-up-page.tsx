@@ -9,6 +9,7 @@ import EyeClosed from '../../assets/svg/eye-see.svg?react';
 import Eye from '../../assets/svg/eye-show.svg?react';
 import { useAppDispatch } from '../../store/hooks';
 import { loginUser } from '../../api/login';
+import { routeList } from '../../const/routes';
 
 export type Data = {
   billingCity: string;
@@ -379,10 +380,10 @@ const SignUpPage = (): ReactElement => {
             <button className="singup-form__submit" type="submit" disabled={submitDisabled}>
               {submitDisabled ? 'Submitting...' : 'Submit'}
             </button>
-            <button className="singup-form__submit" onClick={() => navigate('/')}>
+            <button className="singup-form__submit" onClick={() => navigate(routeList.MAIN)}>
               Main page
             </button>
-            <button className="singup-form__submit" onClick={() => navigate('/login')}>
+            <button className="singup-form__submit" onClick={() => navigate(routeList.LOGIN)}>
               Login
             </button>
           </div>

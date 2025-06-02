@@ -4,7 +4,7 @@ import Header from './components/header/header';
 import LoginPage from './pages/login/login-page';
 import SignUpPage from './pages/signup/sign-up-page';
 import type { ReactElement } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import type { Dispatch, UnknownAction } from '@reduxjs/toolkit';
 import { refreshAccessToken } from './api/refresh-token';
@@ -18,9 +18,11 @@ import Addresses from './components/addresses/addresses';
 import Toast from './components/toast/toast';
 import ProductPage from './pages/product/product-page';
 import { loginUnauthorizedUser } from './api/unauthorized-login';
+import { routeList } from './const/routes';
 
 function App(): ReactElement {
   const toast = useAppSelector((state) => state.toast);
+  const refreshToken = useAppSelector((state) => state.auth.refreshToken);
   const dispatch = useAppDispatch();
 
   const authHost = import.meta.env.VITE_AUTH_HOST;
@@ -56,6 +58,8 @@ function App(): ReactElement {
     }
   });
 
+  console.log(refreshToken);
+
   return (
     <>
       {toast.isVisible && (
@@ -64,18 +68,18 @@ function App(): ReactElement {
       <Header />
       <div className="app_content">
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/product/:productId" element={<ProductPage />} />
-          <Route path="/login" element={localStorage.getItem('refreshToken') ? <Navigate to="/" /> : <LoginPage />} />
+          <Route path={routeList.MAIN} element={<HomePage />} />
+          <Route path={routeList.PRODUCT} element={<ProductPage />} />
+          <Route path={routeList.LOGIN} element={!!refreshToken ? <Navigate to="/" /> : <LoginPage />} />
           <Route
-            path="/register"
-            element={localStorage.getItem('refreshToken') ? <Navigate to="/" /> : <SignUpPage />}
+            path={routeList.REGISTER}
+            element={!!refreshToken ? <Navigate to="/" /> : <SignUpPage />}
           />
-          <Route path="/user" element={<UserPage/>}>
+          <Route path={routeList.USER} element={!!refreshToken ? <UserPage/> : <Navigate to="/" /> }>
             <Route index element={<PagePlaceholder/>}/>
-            <Route path="settings" element={<Settings/>} />
-            <Route path="address" element={<Addresses/>} />
-            <Route path="orders" element={<PagePlaceholder/>} />
+            <Route path={routeList.USER_SETTINGS} element={<Settings/>} />
+            <Route path={routeList.USER_ADDRESS} element={<Addresses/>} />
+            <Route path={routeList.USER_SETTINGS} element={<PagePlaceholder/>} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

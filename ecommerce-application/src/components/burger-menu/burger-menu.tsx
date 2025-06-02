@@ -7,6 +7,7 @@ import { useScreenSize } from '../../hooks/use-screen-size';
 import { useEffect } from 'react';
 import type { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
+import { routeList } from '../../const/routes';
 
 interface Properties {
   menuOpen: boolean;
@@ -49,10 +50,10 @@ const BurgerMenu = ({ menuOpen, setMenuOpen }: Properties): ReactElement => {
     <div className="burger-menu">
       {isAuthenticated ? (
         <div className="burger-menu__content">
-          <span>
+          <p>
             {customer.customer?.firstName} {customer.customer?.lastName}
-          </span>
-          <Link to="/user-profile" className="burger-menu__button_secondary">
+          </p>
+          <Link to={routeList.USER} className="burger-menu__button_secondary">
             User profile
           </Link>
           <button
@@ -71,7 +72,7 @@ const BurgerMenu = ({ menuOpen, setMenuOpen }: Properties): ReactElement => {
             className="burger-menu__button_primary"
             onClick={(): void => {
               setMenuOpen(false);
-              navigate('/login');
+              navigate(routeList.LOGIN);
             }}
           >
             Login
@@ -80,16 +81,13 @@ const BurgerMenu = ({ menuOpen, setMenuOpen }: Properties): ReactElement => {
             className="burger-menu__button_secondary"
             onClick={(): void => {
               setMenuOpen(false);
-              navigate('/register');
+              navigate(routeList.REGISTER);
             }}
           >
             Sign Up
           </button>
         </div>
       )}
-      <Link to="/catalog-product-page" className="burger-menu__button_secondary">
-        Catalog product page
-      </Link>
     </div>
   );
 };
