@@ -6,6 +6,7 @@ import { getProductById } from '../../api/get-product-by-id';
 import { Category, CategoryReference, Image, ProductVariant } from '@commercetools/platform-sdk';
 import { getCategories } from '../../api/get-categories';
 import Slider from '../../components/slider/slider';
+import { unsetCurrentProduct } from '../../store/product-slice';
 
 const ProductPage: React.FC = () => {
     const {currentProduct, categories} = useAppSelector(state => state.product);
@@ -36,6 +37,7 @@ const ProductPage: React.FC = () => {
                 setIsLoading(false);
             }
         }
+        return () => dispatch(unsetCurrentProduct());
     }, [productId]);
 
     useEffect(() => {
@@ -82,8 +84,6 @@ const ProductPage: React.FC = () => {
             setImageSet(images);
         }
     }, [variantData])
-
-    console.log(imageSet);
 
     useEffect(() => {
         if(currentProduct && categories.length > 0){
