@@ -1,0 +1,100 @@
+.login-form_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 20px;
+  width: 100%;
+}
+
+.login-form_field-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 5px;
+  width: 100%;
+}
+
+.login-form_label {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #333333;
+}
+
+.login-form_field {
+  padding: 10px 15px;
+  font-size: 16px;
+  color: #333333;
+  border: 1px solid #333333;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.login-form_field:-webkit-autofill,
+.login-form_field:-webkit-autofill:hover,
+.login-form_field:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 30px #ffffff inset;
+}
+
+.login-form_field::placeholder {
+  color: #888888;
+  font-style: italic;
+}
+
+.login-form_error {
+  font-weight: 400;
+  font-size: 12px;
+  color: #ff0000;
+}
+
+.login-form_submit {
+  width: 100%;
+  background-color: #ff3d9e;
+  border: 1px solid #ff3d9e;
+  border-radius: 5px;
+  outline: 0;
+  color: #ffffff;
+  cursor: pointer;
+  transition:
+    color 0.25s linear,
+    background-color 0.25s linear;
+}
+
+.login-form_submit:hover {
+  border: 1px solid #ff3d9e;
+  background-color: #ffffff;
+  color: #ff3d9e;
+}
+
+.login-form_submit:disabled {
+  border: 1px solid #747474;
+  background-color: #747474;
+  color: #ffffff;
+  cursor: default;
+}
+
+.login-form_password-input {
+  width: 100%;
+  position: relative;
+}
+
+.login-form_password-visible-button {
+  border: 0;
+  outline: 0;
+  background-color: transparent;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+}
+
+.login-form_password-visible-button:focus {
+  outline: 0;
+}

@@ -1,11 +1,10 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
 import unicorn from 'eslint-plugin-unicorn';
 import prettierConfig from 'eslint-config-prettier';
-
 
 export default tseslint.config(
   {
@@ -14,8 +13,6 @@ export default tseslint.config(
       reportUnusedDisableDirectives: true,
     },
   },
-  { ignores: ['node_modules', 'dist'], },
-  React.configs.flat.recommended,
   prettierConfig,
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
@@ -33,14 +30,8 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       ...tseslint.configs.recommendedTypeChecked.rules,
       ...unicorn.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-      '@typescript-eslint/consistent-type-assertions': [
-        'error',
-        { assertionStyle: 'never' },
-      ],
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/explicit-member-accessibility': [
@@ -51,4 +42,5 @@ export default tseslint.config(
       'class-methods-use-this': 'error',
     },
   },
-)
+  { ignores: ['node_modules', 'dist', 'vite.config.d.ts', 'src/vite-env.d.ts'] },
+);
