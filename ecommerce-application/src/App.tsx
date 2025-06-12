@@ -58,8 +58,6 @@ function App(): ReactElement {
     }
   });
 
-  console.log(refreshToken);
-
   return (
     <>
       {toast.isVisible && (

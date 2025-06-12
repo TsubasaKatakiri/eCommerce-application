@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import './home-page.css';
-import { getProducts } from '../../api/get-products';
 import { getCategories } from '../../api/get-categories';
 import ProductCard from '../../components/product-card/product-card';
 import { Product } from '@commercetools/platform-sdk';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
-// import { searchProducts } from '../../api/search-products';
+import ProductsList from '../../components/products-list/products-list';
 
 const HomePage: React.FC = () => {
   const {products, categories} = useAppSelector(state => state.product);
@@ -18,7 +17,7 @@ const HomePage: React.FC = () => {
 
   const getData = async(): Promise<void> => {
      try {
-        getProducts(dispatch);
+        // getProducts(dispatch);
         // searchProducts(dispatch);
         getCategories(dispatch);
       } catch {
@@ -39,15 +38,15 @@ const HomePage: React.FC = () => {
     } else getData();
   }, [])
 
-  useEffect(() => {
-    setFiltered(products);
-  }, [products])
+  // useEffect(() => {
+  //   setFiltered(products);
+  // }, [products])
 
   const handleCategoryChange = (id: string | undefined): void => {
-    if(id){
-      const filteredProducts = products.filter(item => item.masterData.staged.categories.some(item => item.id === id));
-      setFiltered(filteredProducts);
-    } else setFiltered(products);
+    // if(id){
+    //   const filteredProducts = products.filter(item => item.masterData.staged.categories.some(item => item.id === id));
+    //   setFiltered(filteredProducts);
+    // } else setFiltered(products);
   }
 
   return (
@@ -76,16 +75,7 @@ const HomePage: React.FC = () => {
       </div>
       <div className='home_contents'>
         <div className='product_cards'>
-          {filtered.length > 0 
-          ? <>
-            {filtered.map(item => <ProductCard product={item} key={item.id}/>)}
-          </>
-          : loading 
-            ? <span>Loading...</span>
-            : error 
-              ? <span>Error</span>
-              : <></>
-          }
+          <ProductsList/>
         </div>
       </div>
     </div>
