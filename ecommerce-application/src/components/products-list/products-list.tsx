@@ -18,7 +18,7 @@ const ProductsList: React.FC = () => {
 
     const getData = async(): Promise<void> => {
       try {
-        searchProducts(pageSize, dispatch, pageNumber, currentCategory, searchTerm);
+        await searchProducts(pageSize, dispatch, pageNumber, currentCategory, searchTerm);
       } catch {
         setError(true);
       } finally {
