@@ -3,9 +3,10 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import './home-page.css';
 import { getCategories } from '../../api/get-categories';
 import ProductCard from '../../components/product-card/product-card';
-import { Product } from '@commercetools/platform-sdk';
+import { Category, Product } from '@commercetools/platform-sdk';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 import ProductsList from '../../components/products-list/products-list';
+import { setCurrentCategory } from '../../store/product-slice';
 
 const HomePage: React.FC = () => {
   const {products, categories} = useAppSelector(state => state.product);
@@ -17,8 +18,6 @@ const HomePage: React.FC = () => {
 
   const getData = async(): Promise<void> => {
      try {
-        // getProducts(dispatch);
-        // searchProducts(dispatch);
         getCategories(dispatch);
       } catch {
         setError(true);
@@ -38,15 +37,8 @@ const HomePage: React.FC = () => {
     } else getData();
   }, [])
 
-  // useEffect(() => {
-  //   setFiltered(products);
-  // }, [products])
-
-  const handleCategoryChange = (id: string | undefined): void => {
-    // if(id){
-    //   const filteredProducts = products.filter(item => item.masterData.staged.categories.some(item => item.id === id));
-    //   setFiltered(filteredProducts);
-    // } else setFiltered(products);
+  const handleCategoryChange = (category: Category | undefined): void => {
+    dispatch(setCurrentCategory(category));
   }
 
   return (
@@ -60,7 +52,7 @@ const HomePage: React.FC = () => {
               All products
             </button>
             {categories.map(item => 
-              <button className='home_category' key={item.id} onClick={() => handleCategoryChange(item.id)}>
+              <button className='home_category' key={item.id} onClick={() => handleCategoryChange(item)}>
                 {item.name['en-US']}
               </button>)
             }

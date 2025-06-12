@@ -8,7 +8,8 @@ interface ProductState {
   offset: number,
   limit: number,
   searchTerm: string,
-  categories: Category[];
+  categories: Category[],
+  currentCategory: Category | undefined,
   currentProduct: Product | undefined;
 }
 
@@ -19,6 +20,7 @@ const initialState: ProductState = {
   limit: 10,
   searchTerm: '',
   categories: [],
+  currentCategory: undefined,
   currentProduct: undefined,
 };
 
@@ -35,8 +37,14 @@ export const productSlice = createSlice({
         .filter((product) => product !== undefined);
       state.products = products;
     },
+    setSearchTerm: (state, { payload }: PayloadAction<string>) => {
+        state.searchTerm = payload;  
+    },
     setCategories: (state, { payload }: PayloadAction<{categories: Category[]}>) => {
         state.categories = payload.categories;  
+    },
+    setCurrentCategory: (state, { payload }: PayloadAction<Category | undefined>) => {
+        state.currentCategory = payload;
     },
     setCurrentProduct: (state, { payload }: PayloadAction<{currentProduct: Product}>) => {
         state.currentProduct = payload.currentProduct;  
@@ -47,5 +55,5 @@ export const productSlice = createSlice({
   },
 });
 
-export const { setProducts, setCategories, setCurrentProduct, unsetCurrentProduct } = productSlice.actions;
+export const { setProducts, setSearchTerm, setCategories, setCurrentCategory, setCurrentProduct, unsetCurrentProduct } = productSlice.actions;
 export default productSlice.reducer;

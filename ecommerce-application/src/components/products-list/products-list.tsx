@@ -4,19 +4,21 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import ProductCard from '../product-card/product-card';
 import { searchProducts } from '../../api/search-products';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
+import { setSearchTerm } from '../../store/product-slice';
 
 const ProductsList: React.FC = () => {
-    const {products, total, offset, limit} = useAppSelector(state => state.product);
+    const {products, total, offset, limit, searchTerm, currentCategory} = useAppSelector(state => state.product);
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
     const [pageSize, setPageSize] = useState<number>(10);
     const [pageNumber, setPageNumber] = useState<number>(0);
     const [paginationButtons, setPaginationButtons] = useState<ReactElement[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     const getData = async(): Promise<void> => {
       try {
-        searchProducts(pageSize, dispatch, pageNumber);
+        searchProducts(pageSize, dispatch, pageNumber, currentCategory, searchTerm);
       } catch {
         setError(true);
       } finally {
@@ -33,13 +35,13 @@ const ProductsList: React.FC = () => {
           .catch(() => setError(true))
           .finally(() => setLoading(false))
         } else getData();
-    }, [pageSize, pageNumber])
+    }, [pageSize, pageNumber, searchTerm, currentCategory])
 
     useEffect(() => {
         const buttonsNumber: number = Math.ceil(total / limit);
         const pageButtons: ReactElement[] = [];
         for(let i = 0; i < buttonsNumber; i++){
-            const button: ReactElement = <button className={`pagination-button ${pageNumber === i ? 'pagination-button__active' : ''}`} onClick={() => setPageNumber(i)}>{i+1}</button>
+            const button: ReactElement = <button className={`pagination-button ${pageNumber === i ? 'pagination-button__active' : ''}`} onClick={() => setPageNumber(i)} key={i}>{i+1}</button>
             pageButtons.push(button);
         }
         setPaginationButtons(pageButtons);
@@ -47,6 +49,10 @@ const ProductsList: React.FC = () => {
 
     return (
         <div className='product-list'>
+            <div className='product-list_search'>
+                <input className='product-list_search-field' type='text' value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder={'Search...'}/>
+                <button className='product-list_search-button' onClick={() => dispatch(setSearchTerm(searchQuery))}>Search</button>
+            </div>
             <div className='product-list_area'>
                 {products.length > 0 
                 ? <>
