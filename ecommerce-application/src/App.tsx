@@ -19,6 +19,7 @@ import Toast from './components/toast/toast';
 import ProductPage from './pages/product/product-page';
 import { loginUnauthorizedUser } from './api/unauthorized-login';
 import { routeList } from './const/routes';
+import BasketPage from './pages/basket/basket-page';
 
 function App(): ReactElement {
   const toast = useAppSelector((state) => state.toast);
@@ -82,6 +83,7 @@ function App(): ReactElement {
             <Route path={routeList.USER_SETTINGS} element={<PagePlaceholder/>} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
+          <Route path='/basket' element={<BasketPage/>}/>
         </Routes>
       </div>
     </>
