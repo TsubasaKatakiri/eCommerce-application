@@ -20,6 +20,8 @@ import ProductPage from './pages/product/product-page';
 import { loginUnauthorizedUser } from './api/unauthorized-login';
 import { routeList } from './const/routes';
 
+import AboutUs from './pages/about-us/about-us'
+
 function App(): ReactElement {
   const toast = useAppSelector((state) => state.toast);
   const refreshToken = useAppSelector((state) => state.auth.refreshToken);
@@ -82,7 +84,7 @@ function App(): ReactElement {
             <Route path={routeList.USER_SETTINGS} element={<PagePlaceholder/>} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
-          <Route path="/about" element={<NotFoundPage/>}/>
+          <Route path="/about" element={<AboutUs/>}/>
         </Routes>
       </div>
     </>
