@@ -8,6 +8,7 @@ import BurgerMenu from '../burger-menu/burger-menu';
 import { useScreenSize } from '../../hooks/use-screen-size';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 import { routeList } from '../../const/routes';
+import aboutUsIcon from '../../assets/about-us-icon/about-us.png';
 
 const Header = (): ReactElement => {
   const customer = useAppSelector((store) => store.user);
@@ -44,7 +45,7 @@ const Header = (): ReactElement => {
       ) : (
         <nav className="header_nav">
           <Link to="/about" className='header__about-link'>
-            about us
+            <img src={aboutUsIcon} alt='about us' className='header__about-icon' />
           </Link>
           {isAuthenticated ? (
             <div className="header_user">
