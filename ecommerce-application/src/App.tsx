@@ -82,6 +82,7 @@ function App(): ReactElement {
             <Route path={routeList.USER_SETTINGS} element={<PagePlaceholder/>} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/about" element={<NotFoundPage/>}/>
         </Routes>
       </div>
     </>

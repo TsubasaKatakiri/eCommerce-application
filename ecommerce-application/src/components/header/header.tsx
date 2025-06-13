@@ -43,6 +43,9 @@ const Header = (): ReactElement => {
         </button>
       ) : (
         <nav className="header_nav">
+          <Link to="/about" className='header__about-link'>
+            about us
+          </Link>
           {isAuthenticated ? (
             <div className="header_user">
               <Link to={routeList.USER} className="header_username">
