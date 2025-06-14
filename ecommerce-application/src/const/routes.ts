@@ -7,4 +7,5 @@ export const routeList = {
     USER_SETTINGS: 'settings',
     USER_ADDRESS: 'address',
     USER_ORDERS: 'orders',
+    CART: '/cart',
 }

@@ -22,6 +22,7 @@ import { routeList } from './const/routes';
 import { setCart } from './store/user-slice';
 import { Cart } from '@commercetools/platform-sdk';
 import { createCart } from './api/create-cart';
+import CartPage from './pages/cart/cart-page';
 
 function App(): ReactElement {
   const toast = useAppSelector((state) => state.toast);
@@ -91,6 +92,7 @@ function App(): ReactElement {
         <Routes>
           <Route path={routeList.MAIN} element={<HomePage />} />
           <Route path={routeList.PRODUCT} element={<ProductPage />} />
+          <Route path={routeList.CART} element={<CartPage />} />
           <Route path={routeList.LOGIN} element={!!refreshToken ? <Navigate to="/" /> : <LoginPage />} />
           <Route
             path={routeList.REGISTER}

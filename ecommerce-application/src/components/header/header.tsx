@@ -43,6 +43,7 @@ const Header = (): ReactElement => {
         </button>
       ) : (
         <nav className="header_nav">
+          <button onClick={() => navigate(routeList.CART)}>Cart</button>
           {isAuthenticated ? (
             <div className="header_user">
               <Link to={routeList.USER} className="header_username">
