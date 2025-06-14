@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import './cart-page.css';
 import { ReactElement, useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import { LineItem } from '@commercetools/platform-sdk';
 import { removeFromCart } from '../../api/remove-from-cart';
 import { clearCart } from '../../api/clear-cart';
 import { addToCart } from '../../api/add-to-cart';
+import CartClearIcon from '../../assets/svg/cart-xmark.svg?react';
 
 const CartPage = () => {
     const {cart} = useAppSelector(state => state.user);
@@ -66,20 +67,20 @@ const CartPage = () => {
                             ? <img src={item.variant.images[0].url} alt='' className='row-item_image'/> 
                             : <div className='row-item_empty-image'>No image</div>}
                         <div className='row-item_info'>
-                            <span>{item.name['en-US']}</span>
-                            <span>{item.variant.attributes && item.variant.attributes[4].value}</span>
-                            <span>{item.variant.sku}</span>
+                            <Link to={`/product/${item.productId}`} className='row-item_name'>{item.name['en-US']}</Link>
+                            <span className='row-item_variant'>{item.variant.attributes && item.variant.attributes[4].value}</span>
+                            <span className='row-item_sku'>{item.variant.sku}</span>
                         </div>
                     </div>
                 </td>
-                <td>
-                    <input type='number' min={0} step={1} value={item.quantity} onChange={(event) => handleAmountChange(event, item)}/>
+                <td className='cart_table-cell__short'>
+                    <input className='row-item_counter' type='number' min={0} step={1} value={item.quantity} onChange={(event) => handleAmountChange(event, item)}/>
                 </td>
-                <td>
-                    <span>{item.totalPrice.currencyCode} {(item.totalPrice.centAmount / 100).toFixed(item.totalPrice.fractionDigits)}</span>
+                <td className='cart_table-cell__short'>
+                    <span className='row-item_price'>{item.totalPrice.currencyCode} {(item.totalPrice.centAmount / 100).toFixed(item.totalPrice.fractionDigits)}</span>
                 </td>
-                <td>
-                    <button onClick={() => handleRemoveItem(item)}>Remove</button>
+                <td className='cart_table-cell__short'>
+                    <button className='row-item_remove-button' onClick={() => handleRemoveItem(item)}>Remove</button>
                 </td>
             </tr>)
             rows.push(row);
@@ -98,20 +99,35 @@ const CartPage = () => {
                 </div>
                 : <div className='cart_contents'>
                     <div className='cart_contents-header'>
-                        <button onClick={handleClearCart}>Clear cart</button>
+                        <button className='cart_contents-clear-button' onClick={handleClearCart}>
+                            <CartClearIcon/>
+                            Clear cart
+                        </button>
                     </div>
                     <table className='cart_table'>
                         <thead className='cart_table-header'>
                             <tr>
                                 <th>Item</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Actions</th>
+                                <th className='cart_table-cell__short'>Quantity</th>
+                                <th className='cart_table-cell__short'>Price</th>
+                                <th className='cart_table-cell__short'>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {itemElements}
                         </tbody>
+                        <tfoot className='cart_table-footer'>
+                            <tr>
+                                <th></th>
+                                <th className='cart_table-cell__short'>Total price</th>
+                                <th className='cart_table-cell__short'>
+                                    <span className='row-item_price'>
+                                        {cart && `${cart.totalPrice.currencyCode} ${(cart.totalPrice.centAmount / 100).toFixed(cart.totalPrice.fractionDigits)}`}
+                                    </span>
+                                </th>
+                                <th className='cart_table-cell__short'></th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             }
