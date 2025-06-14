@@ -81,6 +81,47 @@
   color: #ffffff;
 }
 
+.header_cart-button{
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  outline: 0;
+  background-color: transparent;
+  position: relative;
+}
+
+.header_cart-button svg{
+  stroke: #000000;
+  width: 32px;
+  height: 32px;
+  transition: stroke 0.25s linear;
+}
+
+.header_cart-button:hover svg{
+  stroke: #ff3d9e;
+}
+
+.header_cart-button-mark{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  background-color: #ff3d9e;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 12px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media screen and (max-width: 640px) {
   .header {
     height: 48px;
