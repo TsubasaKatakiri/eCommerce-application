@@ -39,7 +39,7 @@
   margin: 10px auto;
 }
 
-.singup-form__group {
+.signup-form__group {
   width: 100%;
   min-height: 50px;
   display: flex;
@@ -127,7 +127,7 @@
   -webkit-box-shadow: 0 0 0px 30px #ffffff inset;
 }
 
-.singup-form__address {
+.signup-form__address {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -160,7 +160,7 @@
   color: #333333;
 }
 
-.singup-form__submit {
+.signup-form__submit {
   width: 150px;
   font-size: 16px;
   background-color: #ff3d9e;
@@ -175,10 +175,17 @@
     background-color 0.25s linear;
 }
 
-.singup-form__submit:hover {
+.signup-form__submit:hover {
   border: 1px solid #ff3d9e;
   background-color: #ffffff;
   color: #ff3d9e;
+}
+
+.signup-form__submit:disabled {
+  border: 1px solid #747474;
+  background-color: #747474;
+  color: #ffffff;
+  cursor: default;
 }
 
 .singup-form__password-button {
