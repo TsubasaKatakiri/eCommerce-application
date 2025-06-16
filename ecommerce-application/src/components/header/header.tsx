@@ -2,13 +2,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { logout } from '../../store/auth-slice';
 import { clearUser } from '../../store/user-slice';
-import { useState, type ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 import './header.css';
 import BurgerMenu from '../burger-menu/burger-menu';
 import { useScreenSize } from '../../hooks/use-screen-size';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 import { routeList } from '../../const/routes';
 import CartIcon from '../../assets/svg/cart.svg?react';
+import FilterIcon from '../../assets/svg/filter.svg?react';
+import MenuIcon from '../../assets/svg/menu.svg?react';
+import Sidebar from '../sidebar/sidebar';
 
 const Header = (): ReactElement => {
   const {customer, cart} = useAppSelector((store) => store.user);
@@ -18,6 +21,7 @@ const Header = (): ReactElement => {
   const smallScreen = useScreenSize();
 
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
   const handleLogout = async (): Promise<void> => {
     dispatch(logout());
@@ -26,8 +30,41 @@ const Header = (): ReactElement => {
     location.reload();
   };
 
+  const handleSidebarOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setSidebarOpen(!sidebarOpen);
+    document.body.classList.toggle('noscroll');
+  }
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setMenuOpen(!menuOpen)
+    document.body.classList.toggle('noscroll');
+  }
+
+  useEffect(() => {
+      if (sidebarOpen) {
+        const handleClickOutside = (event: MouseEvent): void => {
+          const overlay = document.querySelector('.sidebar_overlay');
+          if (overlay && !overlay.contains(event.currentTarget as Node)) {
+            setSidebarOpen(false);
+          }
+        };
+        document.addEventListener('click', handleClickOutside);
+        return (): void => {
+          document.removeEventListener('click', handleClickOutside);
+        };
+      }
+    }, [sidebarOpen]);
+
   return (
     <header className="header">
+      {smallScreen &&
+        (location.pathname === routeList.MAIN
+          ? <button className="nav__button_secondary" onClick={handleSidebarOpen}><FilterIcon/></button>
+          : <div className='nav_filler'/>
+        )
+      }
       <Link to="/" className="header_logo">
         Good wallpapers
       </Link>
@@ -35,12 +72,9 @@ const Header = (): ReactElement => {
       {smallScreen ? (
         <button
           className="nav__button_secondary"
-          onClick={(event) => {
-            event.stopPropagation();
-            setMenuOpen(!menuOpen);
-          }}
+          onClick={handleMenuOpen}
         >
-          Menu
+          <MenuIcon/>
         </button>
       ) : (
         <nav className="header_nav">
@@ -69,6 +103,13 @@ const Header = (): ReactElement => {
           )}
         </nav>
       )}
+      {sidebarOpen && 
+        <div className='sidebar_overlay'>
+          <div className='sidebar_body'>
+            <Sidebar/>
+          </div>
+        </div>
+      }
       {menuOpen && <BurgerMenu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />}
     </header>
   );

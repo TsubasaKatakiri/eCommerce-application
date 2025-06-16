@@ -6,7 +6,6 @@ import './burger-menu.css';
 import { useScreenSize } from '../../hooks/use-screen-size';
 import { useEffect } from 'react';
 import type { ReactElement } from 'react';
-import { Link } from 'react-router-dom';
 import { routeList } from '../../const/routes';
 
 interface Properties {
@@ -15,7 +14,7 @@ interface Properties {
 }
 
 const BurgerMenu = ({ menuOpen, setMenuOpen }: Properties): ReactElement => {
-  const customer = useAppSelector((store) => store.user);
+  const {customer, cart} = useAppSelector((store) => store.user);
   const isAuthenticated = !!localStorage.getItem('refreshToken');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -51,11 +50,14 @@ const BurgerMenu = ({ menuOpen, setMenuOpen }: Properties): ReactElement => {
       {isAuthenticated ? (
         <div className="burger-menu__content">
           <p>
-            {customer.customer?.firstName} {customer.customer?.lastName}
+            {customer?.firstName} {customer?.lastName}
           </p>
-          <Link to={routeList.USER} className="burger-menu__button_secondary">
+          <button className="burger-menu__button_secondary" onClick={() => navigate(routeList.CART)}>
+            My cart {cart && cart.lineItems.length > 0 && <span>({cart.lineItems.length})</span>}
+          </button>
+          <button className="burger-menu__button_secondary" onClick={() => navigate(routeList.USER)}>
             User profile
-          </Link>
+          </button>
           <button
             className="burger-menu__button_secondary"
             onClick={(): void => {
@@ -68,6 +70,9 @@ const BurgerMenu = ({ menuOpen, setMenuOpen }: Properties): ReactElement => {
         </div>
       ) : (
         <div className="burger-menu__content">
+          <button className="burger-menu__button_secondary" onClick={() => navigate(routeList.CART)}>
+            My cart
+          </button>
           <button
             className="burger-menu__button_primary"
             onClick={(): void => {

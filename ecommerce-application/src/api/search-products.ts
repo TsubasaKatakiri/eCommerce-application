@@ -108,6 +108,5 @@ export const searchProducts = async (
     throw new Error('Failed to get products');
   }
   const productData:ProductPagedSearchResponse = await response.json();
-  console.log(productData);
   dispatch(setProducts({response: productData}));
 };

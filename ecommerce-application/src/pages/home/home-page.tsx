@@ -5,7 +5,9 @@ import Sidebar from '../../components/sidebar/sidebar';
 const HomePage: React.FC = () => {
   return (
     <div className='home_wrapper'>
-      <Sidebar/>
+      <div className='home_sidebar'>
+        <Sidebar/>
+      </div>
       <div className='home_contents'>
         <div className='product_cards'>
           <ProductsList/>
