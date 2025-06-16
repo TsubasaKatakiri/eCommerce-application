@@ -136,6 +136,7 @@
   justify-content: center;
 }
 
+
 .sidebar_overlay{
   display: none;
 }
@@ -146,6 +147,25 @@
 
 .noscroll{
   overflow-y: hidden;
+}
+
+.header__basket-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.header__basket-indicator {
+  color: rgb(255, 0, 0);
+}
+
+.header__about-icon {
+  width: 30px;
+  height: 30px;
+  transition: transform 0.3s ease;
+}
+  
+.header__about-icon:hover {
+  transform: scale(1.1);
 }
 
 @media screen and (max-width: 640px) {

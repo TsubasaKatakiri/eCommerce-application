@@ -24,6 +24,8 @@ import { Cart } from '@commercetools/platform-sdk';
 import { createCart } from './api/create-cart';
 import CartPage from './pages/cart/cart-page';
 import PlaceholderUser from './components/placeholder-user/placeholder-user';
+import BasketPage from './pages/basket/basket-page';
+import AboutUs from './pages/about-us/about-us'
 
 function App(): ReactElement {
   const {cart} = useAppSelector((store) => store.user);
@@ -106,6 +108,8 @@ function App(): ReactElement {
             <Route path={routeList.USER_ADDRESS} element={<Addresses/>} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/about" element={<AboutUs/>}/>
+          <Route path='/basket' element={<BasketPage/>}/>
         </Routes>
       </div>
     </>
