@@ -2,6 +2,7 @@ import type {  Category, ProductPagedSearchResponse, ProductSearchRequest } from
 import type { Dispatch, UnknownAction } from "@reduxjs/toolkit";
 import { setProducts } from "../store/product-slice";
 import type { Filters } from "../types/filters";
+import type { SearchExpression, SearchRangeExpression } from "../types/query-types";
 
 export const searchProducts = async (
   limit: number,
@@ -17,16 +18,7 @@ export const searchProducts = async (
   const token = localStorage.getItem('accessToken');
   if(!token) throw new Error('Invalid token');
 
-  const searchQuery: ProductSearchRequest = {
-    limit: limit,
-    offset: page ? limit * page : 0,
-    markMatchingVariants: true,
-    productProjectionParameters: {
-      staged: true,
-    },
-  };
-
-  const queryConditions: unknown[] = [];
+  const queryConditions: SearchExpression[] = [];
 
   if (queryString && queryString.length > 0) {
     queryConditions.push({
@@ -49,7 +41,7 @@ export const searchProducts = async (
   }
 
   if ((filters.minPrice !== undefined) || (filters.maxPrice !== undefined)) {
-    const rangeCondition: unknown = {
+    const rangeCondition: SearchRangeExpression = {
       range: {
         field: "variants.prices.centAmount",
         fieldType: "number",
@@ -75,7 +67,7 @@ export const searchProducts = async (
   }
 
   if (filters.minWidth !== undefined || filters.maxWidth !== undefined) {
-    const rangeCondition: unknown = {
+    const rangeCondition: SearchRangeExpression  = {
       range: {
         field: "variants.attributes.Roll-width-02",
         fieldType: "number",
@@ -90,9 +82,22 @@ export const searchProducts = async (
     queryConditions.push(rangeCondition);
   }
 
-  if (queryConditions.length > 0) {
-    searchQuery.query = queryConditions.length === 1 ? queryConditions[0] : { and: queryConditions };
-  }
+  const searchQuery: ProductSearchRequest = queryConditions.length > 0 ? {
+      limit: limit,
+      offset: page ? limit * page : 0,
+      markMatchingVariants: true,
+      productProjectionParameters: {
+        staged: true,
+      },
+      query: queryConditions.length === 1 ? queryConditions[0] : { and: queryConditions }
+    } : {
+      limit: limit,
+      offset: page ? limit * page : 0,
+      markMatchingVariants: true,
+      productProjectionParameters: {
+        staged: true,
+      },
+    };
 
   const url = `${apiHost}${projectKey}/products/search`
   const response = await fetch(url, {
