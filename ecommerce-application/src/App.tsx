@@ -12,7 +12,6 @@ import { login, logout } from './store/auth-slice';
 import HomePage from './pages/home/home-page';
 import NotFoundPage from './pages/not-found/not-found-page';
 import UserPage from './pages/user/user-page';
-import PagePlaceholder from './components/page-placeholder/page-placeholder';
 import Settings from './components/settings/settings';
 import Addresses from './components/addresses/addresses';
 import Toast from './components/toast/toast';
@@ -108,7 +107,7 @@ function App(): ReactElement {
             <Route path={routeList.USER_ADDRESS} element={<Addresses/>} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
-          <Route path="/about" element={<AboutUs/>}/>
+          <Route path={routeList.ABOUT} element={<AboutUs/>}/>
           <Route path='/basket' element={<BasketPage/>}/>
         </Routes>
       </div>

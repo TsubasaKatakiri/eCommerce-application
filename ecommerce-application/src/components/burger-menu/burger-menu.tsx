@@ -27,7 +27,10 @@ const BurgerMenu = ({ menuOpen, setMenuOpen }: Properties): ReactElement => {
   };
 
   useEffect(() => {
-    if (!smallScreen) setMenuOpen(false);
+    if (!smallScreen) {
+      setMenuOpen(false);
+      document.body.classList.remove('noscroll');
+    }
   }, [smallScreen]);
 
   useEffect(() => {
@@ -36,6 +39,7 @@ const BurgerMenu = ({ menuOpen, setMenuOpen }: Properties): ReactElement => {
         const burgerMenu = document.querySelector('.burger-menu');
         if (burgerMenu && !burgerMenu.contains(event.target as Node)) {
           setMenuOpen(false);
+          document.body.classList.remove('noscroll');
         }
       };
       document.addEventListener('click', handleClickOutside);
@@ -57,6 +61,9 @@ const BurgerMenu = ({ menuOpen, setMenuOpen }: Properties): ReactElement => {
           </button>
           <button className="burger-menu__button_secondary" onClick={() => navigate(routeList.USER)}>
             User profile
+          </button>
+          <button className="burger-menu__button_secondary" onClick={() => navigate(routeList.ABOUT)}>
+            About us
           </button>
           <button
             className="burger-menu__button_secondary"
@@ -90,6 +97,9 @@ const BurgerMenu = ({ menuOpen, setMenuOpen }: Properties): ReactElement => {
             }}
           >
             Sign Up
+          </button>
+          <button className="burger-menu__button_secondary" onClick={() => navigate(routeList.ABOUT)}>
+            About us
           </button>
         </div>
       )}

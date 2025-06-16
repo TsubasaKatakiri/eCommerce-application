@@ -18,7 +18,7 @@ const AboutUs = (): ReactElement => {
 								<div className='customer__content'>
 									<h2 className='customer__name'>Алексей Реут</h2>	
 									<p className='customer__about'>
-										Высоко технологичный, общительный, дружелюбный, толерантный. Эффективно и быстро обучаемый (врач и менеджер по продажам).
+										Высоко технологичный, общительный, дружелюбный, толерантный. Эффективно и быстро обучаемый (врач и программист-любитель).
 									</p>
 								</div>
 							</div>	
@@ -26,13 +26,13 @@ const AboutUs = (): ReactElement => {
 								<li className='customer__task'>Настроил репозиторий и доску отслеживания задач.</li>
 								<li className='customer__task'>Сконфигурировал среду разработки и настроил ее сценарий.</li>
 								<li className='customer__task'>Реализовал страницу входа.</li>
-								<li className='customer__task'>Настроил текущий токен утентификации и интегрировал страницы регистрации и входа с CommerceTools</li>
-								<li className='customer__task'>Создал подробную реализация страницы продукта.</li>
+								<li className='customer__task'>Настроил текущий токен аутентификации и интегрировал страницы регистрации и входа с CommerceTools</li>
+								<li className='customer__task'>Создал подробную реализацию страницы продукта.</li>
 								<li className='customer__task'>Добавил возможность редактирования профиля пользователя.</li>
 								<li className='customer__task'>Разработал и реализовал корзину продуктов и все ее функции.</li>
 								<li className='customer__task'>Добавил промокод, всплывающие подсказки и скидки на товары.</li>
 								</ul> 
-							<a className='customer__link' href='https://github.com/tsubasakatakiri'>Замечен на GitHab!</a>			
+							<a className='customer__link' href='https://github.com/tsubasakatakiri'>Замечен на GitHub!</a>			
 						</div>
 			
 						<div className='about__item customer'>
@@ -50,7 +50,7 @@ const AboutUs = (): ReactElement => {
 								<li className='customer__task'>Разработал межстраничную маршрутизацию, кнопки и заголовки</li>
 								<li className='customer__task'>Сделал навигацию по категориям товаров доступной, а карточки товаров интерактивными</li>
 							</ul>	
-							<a className='customer__link' href='https://github.com/rixels'>Замечен на GitHab!</a>			
+							<a className='customer__link' href='https://github.com/rixels'>Замечен на GitHub!</a>			
 						</div>
 			
 						<div className='about__item customer'>
@@ -58,7 +58,7 @@ const AboutUs = (): ReactElement => {
 								<img src={customer3} className='customer__foto' alt='Учасник команды' />
 								<div className='customer__content'>
 									<h2 className='customer__name'>Татьяна Бжассо</h2>	
-									<p className='customer__about'>Трудолюбивая, сосредоточенная, быстро обучаемая (толи программист, толи бухгалтер).
+									<p className='customer__about'>Трудолюбивая, сосредоточенная, быстро обучаемая (то ли программист, то ли бухгалтер).
 									</p>
 								</div>
 							</div>	
@@ -68,7 +68,7 @@ const AboutUs = (): ReactElement => {
 								<li className='customer__task'>Добавила товары в каталог.</li>
 								<li className='customer__task'>Рассказала о деяниях команды.</li>
 							</ul>	
-							<a className='customer__link' href='https://github.com/tatianabz'>Замечена на GitHab!</a>		
+							<a className='customer__link' href='https://github.com/tatianabz'>Замечена на GitHub!</a>		
 						</div>
 					</div>
 					</div>

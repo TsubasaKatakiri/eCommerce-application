@@ -8,4 +8,5 @@ export const routeList = {
     USER_ADDRESS: 'address',
     USER_ORDERS: 'orders',
     CART: '/cart',
+    ABOUT: '/about',
 }
