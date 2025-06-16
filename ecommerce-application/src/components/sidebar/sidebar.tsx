@@ -7,6 +7,7 @@ import { Category } from '@commercetools/platform-sdk';
 import { setCurrentCategory, setFilters } from '../../store/product-slice';
 import type { Filters } from '../../types/filters';
 import Preloader from '../preloader/preloader';
+import ErrorMessage from '../error-message/error-message';
 
 const Sidebar = () => {
     const {currentCategory, categories} = useAppSelector(state => state.product);
@@ -91,7 +92,7 @@ const Sidebar = () => {
                 : loading 
                     ? <Preloader/>
                     : error 
-                    ? <span>Error</span>
+                    ? <ErrorMessage/>
                     : <></>
                 }
                 </div>

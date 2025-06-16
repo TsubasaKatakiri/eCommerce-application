@@ -9,6 +9,7 @@ import Magnify from '../../assets/svg/search.svg?react';
 import ChevronLeft from '../../assets/svg/chevron-left.svg?react';
 import ChevronRight from '../../assets/svg/chevron-right.svg?react';
 import Preloader from '../preloader/preloader';
+import ErrorMessage from '../error-message/error-message';
 
 const ProductsList: React.FC = () => {
     const {products, total, offset, limit, searchTerm, currentCategory, filters} = useAppSelector(state => state.product);
@@ -67,7 +68,7 @@ const ProductsList: React.FC = () => {
                 : loading 
                     ? <Preloader/>
                     : error 
-                    ? <span>Error</span>
+                    ? <ErrorMessage/>
                     : <></>
                 }
             </div>

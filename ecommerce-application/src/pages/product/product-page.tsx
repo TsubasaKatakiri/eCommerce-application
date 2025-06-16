@@ -11,6 +11,7 @@ import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 import { addToCart } from '../../api/add-to-cart';
 import { removeFromCart } from '../../api/remove-from-cart';
 import Preloader from '../../components/preloader/preloader';
+import ErrorMessage from '../../components/error-message/error-message';
 
 const ProductPage: React.FC = () => {
     const {cart} = useAppSelector(state => state.user);
@@ -208,7 +209,7 @@ const ProductPage: React.FC = () => {
                 </>
                 : isLoading 
                     ? <Preloader/>
-                    : isError ? <>Error</> : <></>
+                    : isError ? <ErrorMessage/> : <></>
             }
         </div>
     );
