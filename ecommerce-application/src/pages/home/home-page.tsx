@@ -9,12 +9,10 @@ import ProductsList from '../../components/products-list/products-list';
 import { setCurrentCategory } from '../../store/product-slice';
 
 const HomePage: React.FC = () => {
-  const {products, categories} = useAppSelector(state => state.product);
+  const {currentCategory, categories} = useAppSelector(state => state.product);
   const dispatch = useAppDispatch();
-  const [filtered, setFiltered] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  // const [category, setCategory] = useState<Category | undefined>();
 
   const getData = async(): Promise<void> => {
      try {
@@ -44,15 +42,15 @@ const HomePage: React.FC = () => {
   return (
     <div className='home_wrapper'>
       <div className='home_categories'>
-        <h3>Categories</h3>
+        <h3 className='home_categories-title'>Categories</h3>
         <div className='home_categories-list'>
           {categories.length > 0 
           ? <>
-            <button className='home_category' key={1} onClick={() => handleCategoryChange(undefined)}>
+            <button className={`home_category ${!currentCategory && 'home_category__active'}`} key={1} onClick={() => handleCategoryChange(undefined)}>
               All products
             </button>
             {categories.map(item => 
-              <button className='home_category' key={item.id} onClick={() => handleCategoryChange(item)}>
+              <button className={`home_category ${currentCategory && currentCategory.id === item.id && 'home_category__active'}`} key={item.id} onClick={() => handleCategoryChange(item)}>
                 {item.name['en-US']}
               </button>)
             }

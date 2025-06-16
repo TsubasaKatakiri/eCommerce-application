@@ -8,11 +8,12 @@ import BurgerMenu from '../burger-menu/burger-menu';
 import { useScreenSize } from '../../hooks/use-screen-size';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 import { routeList } from '../../const/routes';
+import CartIcon from '../../assets/svg/cart.svg?react';
 import aboutUsIcon from '../../assets/about-us-icon/about-us.png';
 import basketIcon from '../../assets/svg/basket.svg'
 
 const Header = (): ReactElement => {
-  const customer = useAppSelector((store) => store.user);
+  const {customer, cart} = useAppSelector((store) => store.user);
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem('refreshToken');
   const dispatch = useAppDispatch();
@@ -31,7 +32,7 @@ const Header = (): ReactElement => {
   return (
     <header className="header">
       <Link to="/" className="header_logo">
-        Ecommerce-logo
+        Good wallpapers
       </Link>
 
       {smallScreen ? (
@@ -46,6 +47,11 @@ const Header = (): ReactElement => {
         </button>
       ) : (
         <nav className="header_nav">
+          <button onClick={() => navigate(routeList.CART)} className='header_cart-button'>
+            <CartIcon/>
+            {cart && cart.lineItems.length > 0 && <span className='header_cart-button-mark'>{cart.lineItems.length}</span>}
+          </button>
+          {customer && isAuthenticated ? (
           <Link to="/about" className='header__about-link'>
             <img src={aboutUsIcon} alt='about us' className='header__about-icon' />
           </Link>
@@ -57,7 +63,7 @@ const Header = (): ReactElement => {
           {isAuthenticated ? (
             <div className="header_user">
               <Link to={routeList.USER} className="header_username">
-                {customer.customer?.firstName} {customer.customer?.lastName}
+                {customer.firstName} {customer.lastName}
               </Link>
               <button onClick={handleLogout} className="nav__button_secondary">
                 Logout
