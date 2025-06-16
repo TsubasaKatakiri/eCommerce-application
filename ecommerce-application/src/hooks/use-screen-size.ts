@@ -12,7 +12,7 @@ export const useScreenSize = (): boolean => {
     window.addEventListener('resize', handleWindowResize);
 
     return (): void => window.removeEventListener('resize', handleWindowResize);
-  });
+  }, []);
 
   return windowWidth <= BREAKPOINT;
 };

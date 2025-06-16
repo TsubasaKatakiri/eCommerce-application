@@ -94,3 +94,9 @@
         width: calc((100% - (20px)) / 2);
     }
 } 
+
+@media screen and (max-width: 469px){
+    .product-card {
+        width: 100%;
+    }
+} 

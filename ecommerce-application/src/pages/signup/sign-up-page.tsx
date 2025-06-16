@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ReactElement } from 'react';
-import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import './sign-up-page.css';
 import { registerUser } from '../../api/register';
@@ -10,53 +9,103 @@ import Eye from '../../assets/svg/eye-show.svg?react';
 import { useAppDispatch } from '../../store/hooks';
 import { loginUser } from '../../api/login';
 import { routeList } from '../../const/routes';
+import { passwordChecker } from '../../helpers/password-checker';
+import { checkAge } from '../../helpers/check-age';
+import { checkPostalCode } from '../../helpers/check-postal-code';
+import { showToast } from '../../store/toast-slice';
 
 export type Data = {
-  billingCity: string;
-  billingPostal: number;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
   billingStreet: string;
-  billingValue: string;
-  birthday: string;
-  commonAddress: boolean;
+  billingCity: string;
+  billingCountry: string;
+  billingPostal: string;
+  shippingStreet: string;
+  shippingCity: string;
+  shippingCountry: string;
+  shippingPostal: string;
   defaultBillingAddress: boolean;
   defaultShippingAddress: boolean;
-  email: string;
-  firstname: string;
-  lastname: string;
-  password: string;
-  shippingCity: string;
-  shippingPostal: number;
-  shippingStreet: string;
-  shippingValue: string;
+  isSameAddress: boolean;
 };
 
 const SignUpPage = (): ReactElement => {
-  const [billingValue, setbillingValue] = useState<string>('');
-  const [shippingValue, setshippingValue] = useState<string>('');
   const [defaultShippingAddress, setdefaultShippingAddress] = useState<boolean>(false);
   const [defaultBillingAddress, setdefaultBillingAddress] = useState<boolean>(false);
-  const [commonAddress, setcommonAddress] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [formError, setFormError] = useState<string | undefined>();
   const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Data>();
+
+  //New form - main fields
+
+  const [password, setPassword] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [dateOfBirth, setDateOfBirth] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+
+  const [firstNameError, setFirstNameError] = useState<string | undefined>();
+  const [lastNameError, setLastNameError] = useState<string | undefined>();
+  const [dateOfBirthError, setDateOfBirthError] = useState<string | undefined>();
+  const [emailError, setEmailError] = useState<string | undefined>();
+  const [passwordError, setPasswordError] = useState<string | undefined>();
+
+  //new form - address fields
+
+  const [billingStreet, setBillingStreet] = useState<string>('');
+  const [billingCity, setBillingCity] = useState<string>('');
+  const [billingCountry, setBillingCountry] = useState<string>('');
+  const [billingPostal, setBillingPostal] = useState<string>('');
+  const [shippingStreet, setShippingStreet] = useState<string>('');
+  const [shippingCity, setShippingCity] = useState<string>('');
+  const [shippingCountry, setShippingCountry] = useState<string>('');
+  const [shippingPostal, setShippingPostal] = useState<string>('');
+
+  const [billingStreetError, setBillingStreetError] = useState<string | undefined>();
+  const [billingCityError, setBillingCityError] = useState<string | undefined>();
+  const [billingPostalError, setBillingPostalError] = useState<string | undefined>();
+  const [shippingStreetError, setShippingStreetError] = useState<string | undefined>();
+  const [shippingCityError, setShippingCityError] = useState<string | undefined>();
+  const [shippingPostalError, setShippingPostalError] = useState<string | undefined>();
+
+  const [isSameAddress, setIsSameAddress] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const onSubmit = async (data: Data): Promise<void> => {
-    console.log(data);
+
+  const onSubmit = async (event: React.FormEvent): Promise<void> => {
+    event.preventDefault();
+    const data: Data = {
+      email,
+      password,
+      firstName,
+      lastName,
+      dateOfBirth,
+      billingStreet,
+      billingCity,
+      billingCountry,
+      billingPostal,
+      shippingStreet,
+      shippingCity,
+      shippingCountry,
+      shippingPostal,
+      defaultBillingAddress,
+      defaultShippingAddress,
+      isSameAddress,
+    };
     setSubmitDisabled(true);
     try {
       await registerUser(data);
-      setFormError('Registered successfully. Logging in...');
+      dispatch(showToast({ status: 'success', text: 'Registered successfully. Logging in...' }));
       await loginUser(data.email, data.password, dispatch);
       setFormError(undefined);
       navigate('/');
     } catch {
+      dispatch(showToast({ status: 'error', text: 'Something went wrong, please, check all fields and try again' }));
       setFormError('Something went wrong, please, check all fields and try again');
     } finally {
       setSubmitDisabled(false);
@@ -64,49 +113,164 @@ const SignUpPage = (): ReactElement => {
   };
 
   const countries: string[][] = [
-    ['Germany', '5'],
-    ['United States', '5'],
-    ['Russia', '6'],
-    ['Belarus', '6'],
-    ['France', ' 5'],
-    ['Spain', '5'],
+    ['Germany',  'DE'],
+    ['United States', 'US'],
+    ['Russia', 'RU'],
+    ['Belarus', 'BY'],
+    ['France', ' FR'],
+    ['Spain', 'ES'],
   ];
 
   const optionsBilling = countries.map((country, index) => {
     return (
-      <option className="singup-form__option" value={country} key={index}>
+      <option className="singup-form__option" value={country[1]} key={index}>
         {countries[index][0]}
       </option>
     );
   });
   const optionsShipping = countries.map((country, index) => {
     return (
-      <option className="singup-form__option" value={country} key={index}>
+      <option className="singup-form__option" value={country[1]} key={index}>
         {countries[index][0]}
       </option>
     );
   });
+
+  //Normal field handlers
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setEmail(event.target.value);
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if(event.target.value.length === 0) setLastNameError('Must contain at least one character');
+    else if (emailRegex.test(event.target.value) === false) setEmailError('Must be a valid email');
+    else setEmailError(undefined);
+  }
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>):void => {
+    setPassword(event.target.value);
+    passwordChecker(event.target.value, setPasswordError);
+  }
+
+  const handleFirstNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setFirstName(event.target.value);
+    const firstNameRegex = /^[A-Za-z\s-/]+$/;
+    if(event.target.value.length === 0) setFirstNameError('Must contain at least one character');
+    else if (firstNameRegex.test(event.target.value) === false) setFirstNameError('Must contain no special characters or numbers');
+    else setFirstNameError(undefined);
+  }
+
+  const handleLastNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setLastName(event.target.value);
+    const lastNameRegex = /^[A-Za-z\s-/]+$/;
+    if(event.target.value.length === 0) setLastNameError('Must contain at least one character');
+    else if (lastNameRegex.test(event.target.value) === false) setLastNameError('Must contain no special characters or numbers');
+    else setLastNameError(undefined);
+  }
+
+  const handleDateOfBirthChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setDateOfBirth(event.target.value);
+    const selectedDate = new Date(event.target.value);
+    if(!checkAge(selectedDate)) setDateOfBirthError('Must be at least 13 years old');
+    else setDateOfBirthError(undefined);
+  }
+
+  //Address field handlers
+
+  const handleStreetName = (event: React.ChangeEvent<HTMLInputElement>, setStreetName: (name: string) => void, setStreetNameError: (error: string | undefined) => void):void => {
+    setStreetName(event.target.value);
+    if(event.target.value.length === 0) setStreetNameError('Must contain at least one character');
+    else setStreetNameError(undefined);
+  }
+  
+  const handleCity = (event: React.ChangeEvent<HTMLInputElement>, setCity: (name: string) => void, setCityError: (error: string | undefined) => void):void => {
+    setCity(event.target.value);
+    const cityRegex = /^[A-Za-z\s-/]+$/
+    if(event.target.value.length === 0) setCityError('Must contain at least one character');
+    else if (cityRegex.test(event.target.value) === false) setCityError('Must contain no special characters or numbers');
+    else setCityError(undefined);
+  }
+  
+  const handleCountry = (event: React.ChangeEvent<HTMLSelectElement>, setCountry: (name: string) => void): void => {
+    setCountry(event.target.value);
+  }
+  
+  useEffect(() => {
+    if(billingPostal && billingPostal.length > 0){
+      checkPostalCode(billingCountry, billingPostal, setBillingPostalError);
+    }
+  }, [billingPostal, billingCountry])
+
+  useEffect(() => {
+    if(shippingPostal && shippingPostal.length > 0){
+      checkPostalCode(shippingCountry, shippingPostal, setShippingPostalError);
+    }
+  }, [shippingPostal, shippingCountry])
+  
+  const handlePostalCode = (event: React.ChangeEvent<HTMLInputElement>, setPostalCode: (name: string) => void):void => {
+    setPostalCode(event.target.value);
+  }
+
+  //same address
+
+  const handleSetSameAddress = ():void => {
+    if(isSameAddress){
+      setIsSameAddress(false);
+    } else {
+      setIsSameAddress(true);
+      setShippingStreet(billingStreet)
+      setShippingCity(billingCity)
+      setShippingCountry(billingCountry);
+      setShippingPostal(billingPostal);
+    }
+  }
+
+  const isFormValid = () => 
+      firstName.trim()
+    && lastName.trim()
+    && email.trim()
+    && dateOfBirth
+    && password
+    && billingStreet.trim()
+    && billingCity.trim()
+    && billingCountry
+    && billingPostal
+    && shippingStreet.trim()
+    && shippingCity.trim()
+    && shippingCountry
+    && shippingPostal
+    && !firstNameError
+    && !lastNameError
+    && !dateOfBirthError
+    && !emailError
+    && !passwordError
+    && !billingStreetError
+    && !billingCityError
+    && !billingPostalError
+    && !shippingStreetError
+    && !shippingCityError
+    && !shippingPostalError
+
   return (
     <>
       <div className="signup_wrapper">
-        <form className="singup-form__wrapper" onSubmit={handleSubmit(onSubmit)}>
+        <form className="singup-form__wrapper" onSubmit={onSubmit}>
           <h1 className="singup-form__title">Sign Up</h1>
           <p className="singup-form__register">Have you not registered yet?</p>
           {formError && <span className="singup-form__error">{formError}</span>}
-          <div className="singup-form__group">
+          <div className="signup-form__group">
             <label className="singup-form__label">Email</label>
             <div className="singup-form__input-group">
               <input
                 className="singup-form__input"
                 placeholder="email"
-                {...register('email', { pattern: /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i, required: true })}
+                value={email}
+                onChange={handleEmailChange}
               />
-              {errors.email?.type === 'required' && <p className="singup-form__error">Email is required.</p>}
-              {errors.email?.type === 'pattern' && <p className="singup-form__error">Email is not valid.</p>}
+              {emailError !== '' && <span className="user-data_error">{emailError}</span>}
             </div>
           </div>
 
-          <div className="singup-form__group">
+          <div className="signup-form__group">
             <label className="singup-form__label">Password</label>
             <div className="singup-form__input-group">
               <div className="singup-form__input-password">
@@ -114,7 +278,8 @@ const SignUpPage = (): ReactElement => {
                   className="singup-form__input"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="password"
-                  {...register('password', { pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/, required: true })}
+                  value={password}
+                  onChange={handlePasswordChange}
                 />
                 <button
                   type="button"
@@ -124,145 +289,111 @@ const SignUpPage = (): ReactElement => {
                   {showPassword ? <Eye width="24px" height="24px" /> : <EyeClosed width="24px" height="24px" />}
                 </button>
               </div>
-              {errors.password?.type === 'required' && <p className="singup-form__error">Password is required.</p>}
-              {errors.password?.type === 'pattern' && (
-                <p className="singup-form__error">
-                  The password must contain at least 8 characters. Of these: 1 uppercase letter, 1 lowercase letter and
-                  1 digit.
-                </p>
-              )}
+              {passwordError !== '' && <span className="login-form_error">{passwordError}</span>}
             </div>
           </div>
 
-          <div className="singup-form__group">
+          <div className="signup-form__group">
             <label className="singup-form__label">Firstname</label>
             <div className="singup-form__input-group">
               <input
                 className="singup-form__input"
                 placeholder="firstname"
-                {...register('firstname', { pattern: /^(?=.*?[A-Za-z]).{1,}$/, required: true })}
+                value={firstName}
+                onChange={handleFirstNameChange}
               />
-              {errors.firstname?.type === 'required' && <p className="singup-form__error">Firstname is required.</p>}
-              {errors.firstname?.type === 'pattern' && (
-                <p className="singup-form__error">
-                  The firstname must contain at least one character and not have any special characters or numbers.
-                </p>
-              )}
+              {firstNameError !== '' && <span className="user-data_error">{firstNameError}</span>}
             </div>
           </div>
 
-          <div className="singup-form__group">
+          <div className="signup-form__group">
             <label className="singup-form__label">Lastname</label>
             <div className="singup-form__input-group">
               <input
                 className="singup-form__input"
                 placeholder="lastname"
-                {...register('lastname', { pattern: /^(?=.*?[A-Za-z]).{1,}$/, required: true })}
+                value={lastName}
+                onChange={handleLastNameChange}
               />
-              {errors.lastname?.type === 'required' && <p className="singup-form__error">Lastname is required.</p>}
-              {errors.lastname?.type === 'pattern' && (
-                <p className="singup-form__error">
-                  The lastname must contain at least one character and not have any special characters or numbers.
-                </p>
-              )}
+              {lastNameError !== '' && <span className="user-data_error">{lastNameError}</span>}
             </div>
           </div>
 
-          <div className="singup-form__group">
+          <div className="signup-form__group">
             <label className="singup-form__label">Birthday</label>
             <div className="singup-form__input-group">
               <input
                 className="singup-form__input"
                 type="date"
                 placeholder="birthday"
-                {...register('birthday', { required: true })}
+                value={dateOfBirth}
+                onChange={handleDateOfBirthChange}
               />
-              {errors.birthday?.type === 'required' && <p className="singup-form__error">Birthday is required.</p>}
+              {dateOfBirthError !== '' && <span className="user-data_error">{dateOfBirthError}</span>}
             </div>
           </div>
 
-          <div className="singup-form__address">
+          <div className="signup-form__address">
             <fieldset className="singup-form__fielset">
               <legend className="singup-form__legend">Billing Address</legend>
 
-              <div className="singup-form__group">
+              <div className="signup-form__group">
                 <label className="singup-form__label">Street</label>
                 <div className="singup-form__input-group">
                   <input
                     className="singup-form__input"
                     placeholder="street"
-                    {...register('billingStreet', { pattern: /^(?=.*?[A-Za-z]).{1,}$/, required: true })}
+                    value={billingStreet}
+                    onChange={(e) => handleStreetName(e, setBillingStreet, setBillingStreetError)}
                   />
-                  {errors.billingStreet?.type === 'required' && (
-                    <p className="singup-form__error">Street is required.</p>
-                  )}
-                  {errors.billingStreet?.type === 'pattern' && (
-                    <p className="singup-form__error">
-                      The Street must contain at least one character and not have any special characters or numbers.
-                    </p>
-                  )}
+                  {billingStreetError !== '' && <span className="user-data_error">{billingStreetError}</span>}
                 </div>
               </div>
 
-              <div className="singup-form__group">
+              <div className="signup-form__group">
                 <label className="singup-form__label">City</label>
                 <div className="singup-form__input-group">
                   <input
                     className="singup-form__input"
                     placeholder="city"
-                    {...register('billingCity', { pattern: /^(?=.*?[A-Za-z]).{1,}$/, required: true })}
+                    value={billingCity}
+                    onChange={(e) => handleCity(e, setBillingCity, setBillingCityError)}
                   />
-                  {errors.billingCity?.type === 'required' && <p className="singup-form__error">City is required.</p>}
-                  {errors.billingCity?.type === 'pattern' && (
-                    <p className="singup-form__error">
-                      The city must contain at least one character and not have any special characters or numbers.
-                    </p>
-                  )}
+                  {billingCityError !== '' && <span className="user-data_error">{billingCityError}</span>}
                 </div>
               </div>
 
-              <div className="singup-form__group">
+              <div className="signup-form__group">
                 <label className="singup-form__label">Country</label>
                 <div className="singup-form__input-group">
                   <select
                     className="singup-form__select"
-                    value={billingValue}
-                    {...register('billingValue')}
-                    onChange={(event) => setbillingValue(event.target.value)}
+                    value={billingCountry}
+                    onChange={(e) => handleCountry(e, setBillingCountry)}
                   >
                     {optionsBilling}
                   </select>
                 </div>
               </div>
 
-              <div className="singup-form__group">
+              <div className="signup-form__group">
                 <label className="singup-form__label">Postal</label>
                 <div className="singup-form__input-group">
                   <input
                     className="singup-form__input"
                     placeholder="postal"
-                    {...register('billingPostal', {
-                      pattern: +billingValue[billingValue.length - 1] === 5 ? /^[0-9]{5}$/ : /^[0-9]{6}$/,
-                      required: true,
-                    })}
+                    value={billingPostal}
+                    onChange={(e) => handlePostalCode(e, setBillingPostal)}
                   />
-                  {errors.billingPostal?.type === 'required' && (
-                    <p className="singup-form__error">postal is required.</p>
-                  )}
-                  {errors.billingPostal?.type === 'pattern' && (
-                    <p className="singup-form__error">
-                      The postal {billingValue.slice(0, -3)} must contain {billingValue[billingValue.length - 1]} digits
-                    </p>
-                  )}
+                  {billingPostalError !== '' && <span className="user-data_error">{billingPostalError}</span>}
                 </div>
               </div>
 
-              <div className="singup-form__group">
+              <div className="signup-form__group">
                 <label className="singup-form__label-chetbox">
                   <input
                     className="singup-form__checkbox"
                     type="checkbox"
-                    {...register('defaultBillingAddress')}
                     checked={defaultBillingAddress}
                     onChange={() => setdefaultBillingAddress(!defaultBillingAddress)}
                   />
@@ -275,84 +406,62 @@ const SignUpPage = (): ReactElement => {
             <fieldset className="singup-form__fielset">
               <legend className="singup-form__legend">Shipping Address</legend>
 
-              <div className="singup-form__group">
+              <div className="signup-form__group">
                 <label className="singup-form__label">Street</label>
                 <div className="singup-form__input-group">
                   <input
                     className="singup-form__input"
                     placeholder="street"
-                    {...register('shippingStreet', { pattern: /^(?=.*?[A-Za-z]).{1,}$/, required: true })}
+                    value={shippingStreet}
+                    onChange={(e) => handleStreetName(e, setShippingStreet, setShippingStreetError)}
                   />
-                  {errors.shippingStreet?.type === 'required' && (
-                    <p className="singup-form__error">Street is required.</p>
-                  )}
-                  {errors.shippingStreet?.type === 'pattern' && (
-                    <p className="singup-form__error">
-                      The Street must contain at least one character and not have any special characters or numbers.
-                    </p>
-                  )}
+                  {shippingStreetError !== '' && <span className="user-data_error">{shippingStreetError}</span>}
                 </div>
               </div>
-              <div className="singup-form__group">
+              <div className="signup-form__group">
                 <label className="singup-form__label">City</label>
                 <div className="singup-form__input-group">
                   <input
                     className="singup-form__input"
                     placeholder="city"
-                    {...register('shippingCity', { pattern: /^(?=.*?[A-Za-z]).{1,}$/, required: true })}
+                    value={shippingCity}
+                    onChange={(e) => handleCity(e, setShippingCity, setShippingCityError)}
                   />
-                  {errors.shippingCity?.type === 'required' && <p className="singup-form__error">City is required.</p>}
-                  {errors.shippingCity?.type === 'pattern' && (
-                    <p className="singup-form__error">
-                      The city must contain at least one character and not have any special characters or numbers..
-                    </p>
-                  )}
+                  {shippingCityError !== '' && <span className="user-data_error">{shippingCityError}</span>}
                 </div>
               </div>
 
-              <div className="singup-form__group">
+              <div className="signup-form__group">
                 <label className="singup-form__label">Country</label>
                 <div className="singup-form__input-group">
                   <select
                     className="singup-form__select"
-                    value={shippingValue}
-                    {...register('shippingValue')}
-                    onChange={(event) => setshippingValue(event.target.value)}
+                    value={shippingCountry}
+                    onChange={(e) => handleCountry(e, setShippingCountry)}
                   >
                     {optionsShipping}
                   </select>
                 </div>
               </div>
 
-              <div className="singup-form__group">
+              <div className="signup-form__group">
                 <label className="singup-form__label">Postal</label>
                 <div className="singup-form__input-group">
                   <input
                     className="singup-form__input"
                     placeholder="postal"
-                    {...register('shippingPostal', {
-                      pattern: +shippingValue[shippingValue.length - 1] === 5 ? /^[0-9]{5}$/ : /^[0-9]{6}$/,
-                      required: true,
-                    })}
+                    value={shippingPostal}
+                    onChange={(e) => handlePostalCode(e, setShippingPostal)}
                   />
-                  {errors.shippingPostal?.type === 'required' && (
-                    <p className="singup-form__error">postal is required.</p>
-                  )}
-                  {errors.shippingPostal?.type === 'pattern' && (
-                    <p className="singup-form__error">
-                      The postal {shippingValue.slice(0, -3)} must contain {shippingValue[shippingValue.length - 1]}{' '}
-                      digits
-                    </p>
-                  )}
+                  {shippingPostalError !== '' && <span className="user-data_error">{shippingPostalError}</span>}
                 </div>
               </div>
 
-              <div className="singup-form__group">
+              <div className="signup-form__group">
                 <label className="singup-form__label-chetbox">
                   <input
                     className="singup-form__checkbox"
                     type="checkbox"
-                    {...register('defaultShippingAddress')}
                     checked={defaultShippingAddress}
                     onChange={() => setdefaultShippingAddress(!defaultShippingAddress)}
                   />
@@ -368,22 +477,21 @@ const SignUpPage = (): ReactElement => {
               <input
                 className="singup-form__checkbox"
                 type="checkbox"
-                {...register('commonAddress')}
-                checked={commonAddress}
-                onChange={() => setcommonAddress(!commonAddress)}
+                checked={isSameAddress}
+                onChange={handleSetSameAddress}
               />
               <div className="singup-form__custom-checkbox"></div>
               Use the same address for both shipping and billing.
             </label>
           </div>
-          <div className="singup-form__group">
-            <button className="singup-form__submit" type="submit" disabled={submitDisabled}>
+          <div className="signup-form__group">
+            <button className="signup-form__submit" type="submit" disabled={submitDisabled || !isFormValid()}>
               {submitDisabled ? 'Submitting...' : 'Submit'}
             </button>
-            <button className="singup-form__submit" onClick={() => navigate(routeList.MAIN)}>
+            <button className="signup-form__submit" type="button" onClick={() => navigate(routeList.MAIN)}>
               Main page
             </button>
-            <button className="singup-form__submit" onClick={() => navigate(routeList.LOGIN)}>
+            <button className="signup-form__submit" type="button" onClick={() => navigate(routeList.LOGIN)}>
               Login
             </button>
           </div>

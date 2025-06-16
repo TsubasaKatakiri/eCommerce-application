@@ -11,30 +11,53 @@ export const registerUser = async (data: Data): Promise<CustomerSignInResult> =>
   }
 
   const billingAddress: BaseAddress = {
-    country: getCountryCode(data.billingValue),
-    firstName: data.firstname,
-    lastName: data.lastname,
+    country: data.billingCountry,
+    firstName: data.firstName,
+    lastName: data.lastName,
     streetName: data.billingStreet,
     postalCode: data.billingPostal.toString(),
     city: data.billingCity,
   };
 
-  const shippingAddress: BaseAddress = {
-    country: getCountryCode(data.shippingValue),
-    firstName: data.firstname,
-    lastName: data.lastname,
-    streetName: data.shippingStreet,
-    postalCode: data.shippingPostal.toString(),
-    city: data.shippingCity,
-  };
+  let addresses: BaseAddress[] = [];
+  let defaultBillingAddress: number | undefined = undefined;
+  let defaultShippingAddress: number | undefined = undefined;
+
+  if (data.isSameAddress) {
+    addresses = [billingAddress];
+    if (data.defaultBillingAddress) {
+      defaultBillingAddress = 0;
+    }
+    if (data.defaultShippingAddress) {
+      defaultShippingAddress = 0;
+    }
+  } else {
+    const shippingAddress: BaseAddress = {
+      country: data.shippingCountry,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      streetName: data.shippingStreet,
+      postalCode: data.shippingPostal,
+      city: data.shippingCity,
+    };
+    addresses = [billingAddress, shippingAddress];
+    if (data.defaultBillingAddress) {
+      defaultBillingAddress = 0;
+    }
+    if (data.defaultShippingAddress) {
+      defaultShippingAddress = 1;
+    }
+  }
 
   const customerDraft: CustomerDraft = {
     email: data.email,
     password: data.password,
-    firstName: data.firstname,
-    lastName: data.lastname,
-    dateOfBirth: data.birthday,
-    addresses: [billingAddress, shippingAddress],
+    firstName: data.firstName,
+    lastName: data.lastName,
+    dateOfBirth: data.dateOfBirth,
+    addresses,
+    defaultBillingAddress,
+    defaultShippingAddress,
   };
 
   try {
@@ -57,35 +80,3 @@ export const registerUser = async (data: Data): Promise<CustomerSignInResult> =>
     throw new Error('An error occurred. Please try again.');
   }
 };
-
-function getCountryCode(data: string): string {
-  const country: string = data.split(',')[0];
-  let value: string = '';
-  switch (country) {
-    case 'United States': {
-      value = 'US';
-      break;
-    }
-    case 'Germany': {
-      value = 'DE';
-      break;
-    }
-    case 'Russia': {
-      value = 'RU';
-      break;
-    }
-    case 'Belarus': {
-      value = 'BY';
-      break;
-    }
-    case 'France': {
-      value = 'FR';
-      break;
-    }
-    case 'Spain': {
-      value = 'ES';
-      break;
-    }
-  }
-  return value;
-}

@@ -31,10 +31,28 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
-.cart_contents-clear-button{
+.promo-code_section{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.promo-code_input{
+    width: 160px;
+    outline: 0;
+    padding: 10px;
+    font-size: 16px;
+    color: #333333;
+    border: 1px solid #333333;
+    border-radius: 5px;
+}
+
+.cart_contents-button{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -44,19 +62,19 @@
     transition: color 0.25s linear, background-color 0.25s linear;
 }
 
-.cart_contents-clear-button:hover{
+.cart_contents-button:hover{
     color: #FFFFFF;
     background-color: #ff3d9e;
 }
 
-.cart_contents-clear-button svg{
+.cart_contents-button svg{
     width: 16px;
     height: 16px;
     stroke: #000000;
     transition: stroke 0.25s linear;
 }
 
-.cart_contents-clear-button:hover svg{
+.cart_contents-button:hover svg{
     stroke: #FFFFFF;
 }
 
@@ -75,6 +93,11 @@
     padding: 20px 0;
     border-left: 1px solid #CCCCCC;
     text-align: center;
+}
+
+.cart_price-cell{
+    display: flex;
+    flex-direction: column;
 }
 
 .row-item_image{
@@ -131,14 +154,56 @@
 
 .row-item_remove-button{
     padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #ff3d9e;
     color: #FFFFFF;
     border: 1px solid #ff3d9e;
     transition: color 0.25s linear, background-color 0.25s linear;
+    margin: 0 auto;
 }
 
 .row-item_remove-button:hover{
     color: #ff3d9e;
     background-color: #FFFFFF;
     border: 1px solid #ff3d9e;
+}
+
+.row-item_remove-button svg{
+    width: 20px;
+    height: 20px;
+    stroke: #FFFFFF;
+}
+
+.cart_empty-placeholder{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 20px;
+}
+
+.cart_empty-text{
+    font-weight: 400;
+    font-style: italic;
+    color: #888888;
+    text-align: center;
+}
+
+.original-price {
+    text-decoration: line-through;
+    font-size: 12px;
+    color: #666666;
+}
+
+@media screen and (max-width: 480px){
+    .row-item_wrapper{
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
 }

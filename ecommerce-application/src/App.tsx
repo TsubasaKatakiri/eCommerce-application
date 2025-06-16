@@ -23,10 +23,12 @@ import { setCart } from './store/user-slice';
 import { Cart } from '@commercetools/platform-sdk';
 import { createCart } from './api/create-cart';
 import CartPage from './pages/cart/cart-page';
+import PlaceholderUser from './components/placeholder-user/placeholder-user';
 import BasketPage from './pages/basket/basket-page';
 import AboutUs from './pages/about-us/about-us'
 
 function App(): ReactElement {
+  const {cart} = useAppSelector((store) => store.user);
   const toast = useAppSelector((state) => state.toast);
   const {accessToken, refreshToken} = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
@@ -73,16 +75,16 @@ function App(): ReactElement {
       }
 
   useEffect(() => {
-    if(accessToken){
-      const cart = localStorage.getItem('cart');
-      if(cart){
-        const parsedCart: Cart = JSON.parse(cart);
+    if(accessToken && !cart){
+      const cartData = localStorage.getItem('cart');
+      if(cartData){
+        const parsedCart: Cart = JSON.parse(cartData);
         dispatch(setCart(parsedCart))
       } else {
         getCartData();
       }
     }
-  }, [accessToken])
+  }, [accessToken, cart])
 
   return (
     <>
@@ -101,10 +103,9 @@ function App(): ReactElement {
             element={!!refreshToken ? <Navigate to="/" /> : <SignUpPage />}
           />
           <Route path={routeList.USER} element={!!refreshToken ? <UserPage/> : <Navigate to="/" /> }>
-            <Route index element={<PagePlaceholder/>}/>
+            <Route index element={<PlaceholderUser/>}/>
             <Route path={routeList.USER_SETTINGS} element={<Settings/>} />
             <Route path={routeList.USER_ADDRESS} element={<Addresses/>} />
-            <Route path={routeList.USER_SETTINGS} element={<PagePlaceholder/>} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/about" element={<AboutUs/>}/>

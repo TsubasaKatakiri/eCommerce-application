@@ -15,9 +15,4 @@ export const userLinks: UserPageMenuLink[] = [
         name: 'Address',
         path: './address',
     },
-    {
-        id: 'orders',
-        name: 'Orders',
-        path: './orders',
-    },
 ]

@@ -10,6 +10,9 @@ import { unsetCurrentProduct } from '../../store/product-slice';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 import { addToCart } from '../../api/add-to-cart';
 import { removeFromCart } from '../../api/remove-from-cart';
+import Preloader from '../../components/preloader/preloader';
+import ErrorMessage from '../../components/error-message/error-message';
+import { createCart } from '../../api/create-cart';
 
 const ProductPage: React.FC = () => {
     const {cart} = useAppSelector(state => state.user);
@@ -49,6 +52,7 @@ const ProductPage: React.FC = () => {
         const token = localStorage.getItem('accessToken');
         if(!token){
             loginUnauthorizedUser()
+            .then(() => createCart(dispatch))
             .then(() => getData())
             .catch(() => setIsError(true))
             .finally(() => setIsLoading(false))
@@ -152,8 +156,6 @@ const ProductPage: React.FC = () => {
     }
 
 
-    console.log(cart);
-
     return (
         <div className='product_wrapper'>
             {currentProduct
@@ -208,8 +210,8 @@ const ProductPage: React.FC = () => {
                     </div>
                 </>
                 : isLoading 
-                    ? <>Loading...</> 
-                    : isError ? <>Error</> : <></>
+                    ? <Preloader/>
+                    : isError ? <ErrorMessage/> : <></>
             }
         </div>
     );

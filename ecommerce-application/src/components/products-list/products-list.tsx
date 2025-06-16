@@ -8,9 +8,13 @@ import { setSearchTerm } from '../../store/product-slice';
 import Magnify from '../../assets/svg/search.svg?react';
 import ChevronLeft from '../../assets/svg/chevron-left.svg?react';
 import ChevronRight from '../../assets/svg/chevron-right.svg?react';
+import Preloader from '../preloader/preloader';
+import ErrorMessage from '../error-message/error-message';
+import { createCart } from '../../api/create-cart';
+import { getDiscountCodes } from '../../api/get-discount-codes';
 
 const ProductsList: React.FC = () => {
-    const {products, total, offset, limit, searchTerm, currentCategory} = useAppSelector(state => state.product);
+    const {products, discountCodes, total, offset, limit, searchTerm, currentCategory, filters} = useAppSelector(state => state.product);
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
@@ -21,7 +25,8 @@ const ProductsList: React.FC = () => {
 
     const getData = async(): Promise<void> => {
       try {
-        await searchProducts(pageSize, dispatch, pageNumber, currentCategory, searchTerm);
+        await searchProducts(pageSize, dispatch, filters, pageNumber, currentCategory, searchTerm);
+        await getDiscountCodes(dispatch);
       } catch {
         setError(true);
       } finally {
@@ -34,11 +39,12 @@ const ProductsList: React.FC = () => {
         const token = localStorage.getItem('accessToken');
         if(!token){
           loginUnauthorizedUser()
+          .then(() => createCart(dispatch))
           .then(() => getData())
           .catch(() => setError(true))
           .finally(() => setLoading(false))
         } else getData();
-    }, [pageSize, pageNumber, searchTerm, currentCategory])
+    }, [pageSize, pageNumber, searchTerm, currentCategory, filters])
 
     useEffect(() => {
         const buttonsNumber: number = Math.ceil(total / limit);
@@ -50,6 +56,8 @@ const ProductsList: React.FC = () => {
         setPaginationButtons(pageButtons);
     }, [products, total, limit])
 
+    console.log(discountCodes);
+
     return (
         <div className='product-list'>
             <div className='product-list_search'>
@@ -58,15 +66,24 @@ const ProductsList: React.FC = () => {
                     <Magnify/>
                 </button>
             </div>
+            {discountCodes.length > 0 && 
+                <div className='product-codes_area'>
+                    {discountCodes.map(item => 
+                        <div className='product_code'>
+                            <span className='product_code-description'>{item.description && item.description['en-US']}</span>
+                        </div>
+                    )}
+                </div>
+            }
             <div className='product-list_area'>
                 {products.length > 0 
                 ? <>
                     {products.map(item => <ProductCard product={item} key={item.id}/>)}
                 </>
                 : loading 
-                    ? <span>Loading...</span>
+                    ? <Preloader/>
                     : error 
-                    ? <span>Error</span>
+                    ? <ErrorMessage/>
                     : <></>
                 }
             </div>

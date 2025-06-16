@@ -8,6 +8,9 @@ import { removeFromCart } from '../../api/remove-from-cart';
 import { clearCart } from '../../api/clear-cart';
 import { addToCart } from '../../api/add-to-cart';
 import CartClearIcon from '../../assets/svg/cart-xmark.svg?react';
+import { useScreenSize } from '../../hooks/use-screen-size';
+import { showToast } from '../../store/toast-slice';
+import { applyDiscountCode } from '../../api/apply-discount-code';
 
 const CartPage = () => {
     const {cart} = useAppSelector(state => state.user);
@@ -15,6 +18,8 @@ const CartPage = () => {
     const [items, setItems] = useState<LineItem[]>([]);
     const [itemElements, setItemElements] = useState<ReactElement[]>([]);
     const navigate = useNavigate();
+    const smallScreen = useScreenSize();
+    const [promoCode, setPromoCode] = useState<string>('');
 
     useEffect(() => {
         if(cart){
@@ -22,11 +27,16 @@ const CartPage = () => {
         }
     }, [cart])
 
-    const handleClearCart = () => {
+    const handleClearCart = async () => {
         if (cart) {
             const { id, version, lineItems } = cart;
             const lineItemIds = lineItems.map(item => item.id);
-            clearCart(id, version, lineItemIds, dispatch);
+            try {
+                await clearCart(id, version, lineItemIds, dispatch);
+                dispatch(showToast({ status: 'success', text: `Cart cleared successfully` }));
+            } catch {
+                dispatch(showToast({ status: 'error', text: `Failed to clear the cart` }));
+            }
         }
     }
 
@@ -57,10 +67,22 @@ const CartPage = () => {
         }
     };
 
+    const handleApplyPromoCode = async () => {
+        if (cart && promoCode) {
+            try {
+                await applyDiscountCode(cart.id, cart.version, promoCode, dispatch);
+                dispatch(showToast({ status: 'success', text: `Promo code applied successfully` }));
+                setPromoCode('');
+            } catch {
+                dispatch(showToast({ status: 'error', text: `Failed to apply promo code` }));
+            }
+        }
+    }
+
     useEffect(() => {
         const rows: ReactElement[] = [];
         items.forEach(item => {
-            const row = (<tr>
+            const row = (<tr key={item.id}>
                 <td>
                     <div className='row-item_wrapper'>
                         {item.variant.images && item.variant.images.length > 0 
@@ -80,7 +102,9 @@ const CartPage = () => {
                     <span className='row-item_price'>{item.totalPrice.currencyCode} {(item.totalPrice.centAmount / 100).toFixed(item.totalPrice.fractionDigits)}</span>
                 </td>
                 <td className='cart_table-cell__short'>
-                    <button className='row-item_remove-button' onClick={() => handleRemoveItem(item)}>Remove</button>
+                    <button className='row-item_remove-button' onClick={() => handleRemoveItem(item)}>
+                        {smallScreen ? <CartClearIcon/> : 'Remove'}
+                    </button>
                 </td>
             </tr>)
             rows.push(row);
@@ -95,11 +119,21 @@ const CartPage = () => {
             {items.length === 0 
                 ? <div className='cart_empty-placeholder'>
                     <span className='cart_empty-text'>The cart is currently empty. Do you want to add some items?</span>
-                    <button onClick={() => navigate(routeList.MAIN)}>To catalog</button>
+                    <button className='cart_contents-button' onClick={() => navigate(routeList.MAIN)}>To catalog</button>
                 </div>
                 : <div className='cart_contents'>
                     <div className='cart_contents-header'>
-                        <button className='cart_contents-clear-button' onClick={handleClearCart}>
+                        <div className='promo-code_section'>
+                            <input
+                                className='promo-code_input'
+                                type='text'
+                                placeholder='Enter promo code'
+                                value={promoCode}
+                                onChange={(e) => setPromoCode(e.target.value)}
+                            />
+                            <button className='cart_contents-button' onClick={handleApplyPromoCode}>Apply</button>
+                        </div>
+                        <button className='cart_contents-button' onClick={handleClearCart}>
                             <CartClearIcon/>
                             Clear cart
                         </button>
@@ -120,7 +154,10 @@ const CartPage = () => {
                             <tr>
                                 <th></th>
                                 <th className='cart_table-cell__short'>Total price</th>
-                                <th className='cart_table-cell__short'>
+                                <th className='cart_table-cell__short cart_price-cell'>
+                                    {cart && cart.discountOnTotalPrice && <span className='original-price'>
+                                        {`${cart.totalPrice.currencyCode} ${((cart.totalPrice.centAmount + cart.discountOnTotalPrice.discountedAmount.centAmount) / 100).toFixed(cart.totalPrice.fractionDigits)}`}
+                                    </span>}
                                     <span className='row-item_price'>
                                         {cart && `${cart.totalPrice.currencyCode} ${(cart.totalPrice.centAmount / 100).toFixed(cart.totalPrice.fractionDigits)}`}
                                     </span>

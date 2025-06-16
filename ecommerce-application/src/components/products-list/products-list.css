@@ -140,3 +140,20 @@
 .pagination-button:disabled svg{
     fill: #BBBBBB
 }
+
+.product-codes_area{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.product_code{
+    width: 100%;
+    padding: 10px;
+    background-color: #EEEEEE;
+    border-radius: 10px;
+}
