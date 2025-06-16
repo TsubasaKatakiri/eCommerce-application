@@ -9,6 +9,8 @@ import { useScreenSize } from '../../hooks/use-screen-size';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 import { routeList } from '../../const/routes';
 import CartIcon from '../../assets/svg/cart.svg?react';
+import aboutUsIcon from '../../assets/about-us-icon/about-us.png';
+import basketIcon from '../../assets/svg/basket.svg'
 
 const Header = (): ReactElement => {
   const {customer, cart} = useAppSelector((store) => store.user);
@@ -16,6 +18,7 @@ const Header = (): ReactElement => {
   const isAuthenticated = !!localStorage.getItem('refreshToken');
   const dispatch = useAppDispatch();
   const smallScreen = useScreenSize();
+  const basketIndicator = 0;//
 
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
@@ -49,6 +52,15 @@ const Header = (): ReactElement => {
             {cart && cart.lineItems.length > 0 && <span className='header_cart-button-mark'>{cart.lineItems.length}</span>}
           </button>
           {customer && isAuthenticated ? (
+          <Link to="/about" className='header__about-link'>
+            <img src={aboutUsIcon} alt='about us' className='header__about-icon' />
+          </Link>
+
+          <Link to="/basket" className='header__basket-link'>
+            <img src={basketIcon} alt='basket icon' className='header__basket-icon' />
+            <span className="header__basket-indicator">{basketIndicator}</span>
+          </Link>
+          {isAuthenticated ? (
             <div className="header_user">
               <Link to={routeList.USER} className="header_username">
                 {customer.firstName} {customer.lastName}
