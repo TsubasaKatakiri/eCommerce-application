@@ -22,6 +22,8 @@ import { routeList } from './const/routes';
 import { setCart } from './store/user-slice';
 import { Cart } from '@commercetools/platform-sdk';
 import { createCart } from './api/create-cart';
+import BasketPage from './pages/basket/basket-page';
+import AboutUs from './pages/about-us/about-us'
 
 function App(): ReactElement {
   const toast = useAppSelector((state) => state.toast);
@@ -103,6 +105,8 @@ function App(): ReactElement {
             <Route path={routeList.USER_SETTINGS} element={<PagePlaceholder/>} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/about" element={<AboutUs/>}/>
+          <Route path='/basket' element={<BasketPage/>}/>
         </Routes>
       </div>
     </>
