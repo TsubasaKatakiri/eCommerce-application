@@ -34,7 +34,7 @@
     justify-content: flex-end;
 }
 
-.cart_contents-clear-button{
+.cart_contents-button{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -44,19 +44,19 @@
     transition: color 0.25s linear, background-color 0.25s linear;
 }
 
-.cart_contents-clear-button:hover{
+.cart_contents-button:hover{
     color: #FFFFFF;
     background-color: #ff3d9e;
 }
 
-.cart_contents-clear-button svg{
+.cart_contents-button svg{
     width: 16px;
     height: 16px;
     stroke: #000000;
     transition: stroke 0.25s linear;
 }
 
-.cart_contents-clear-button:hover svg{
+.cart_contents-button:hover svg{
     stroke: #FFFFFF;
 }
 
@@ -131,14 +131,50 @@
 
 .row-item_remove-button{
     padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #ff3d9e;
     color: #FFFFFF;
     border: 1px solid #ff3d9e;
     transition: color 0.25s linear, background-color 0.25s linear;
+    margin: 0 auto;
 }
 
 .row-item_remove-button:hover{
     color: #ff3d9e;
     background-color: #FFFFFF;
     border: 1px solid #ff3d9e;
+}
+
+.row-item_remove-button svg{
+    width: 20px;
+    height: 20px;
+    stroke: #FFFFFF;
+}
+
+.cart_empty-placeholder{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 20px;
+}
+
+.cart_empty-text{
+    font-weight: 400;
+    font-style: italic;
+    color: #888888;
+    text-align: center;
+}
+
+@media screen and (max-width: 480px){
+    .row-item_wrapper{
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
 }

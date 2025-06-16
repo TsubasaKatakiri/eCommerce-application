@@ -64,8 +64,12 @@
     gap: 20px;
 }
 
+.user-page_menu-container{
+    width: 200px;
+}
+
 .user-page_menu{
-    width: 256px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -87,5 +91,15 @@
 }
 
 .user-page_subpage{
-    width: calc(100% - 256px - 20px);
+    width: calc(100% - 200px - 20px);
+}
+
+@media screen and (max-width: 768px){
+    .user-page_menu-container{
+        display: none;
+    }
+
+    .user-page_subpage{
+        width: 100%;
+    }
 }

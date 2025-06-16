@@ -10,6 +10,7 @@ import { unsetCurrentProduct } from '../../store/product-slice';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 import { addToCart } from '../../api/add-to-cart';
 import { removeFromCart } from '../../api/remove-from-cart';
+import Preloader from '../../components/preloader/preloader';
 
 const ProductPage: React.FC = () => {
     const {cart} = useAppSelector(state => state.user);
@@ -206,7 +207,7 @@ const ProductPage: React.FC = () => {
                     </div>
                 </>
                 : isLoading 
-                    ? <>Loading...</> 
+                    ? <Preloader/>
                     : isError ? <>Error</> : <></>
             }
         </div>

@@ -26,10 +26,12 @@ const UserPage = () => {
                 </div>
             </div>
             <div className='user-page_content'>
-                <div className='user-page_menu'>
-                    {userLinks.map(item => 
-                        <Link key={item.id} to={item.path} className={`user-page_menu-link ${currentPath === item.id ? 'active' : ''}`}>{item.name}</Link>
-                    )}
+                <div className='user-page_menu-container'>
+                    <div className='user-page_menu'>
+                        {userLinks.map(item => 
+                            <Link key={item.id} to={item.path} className={`user-page_menu-link ${currentPath === item.id ? 'active' : ''}`}>{item.name}</Link>
+                        )}
+                    </div>
                 </div>
                 <div className='user-page_subpage'>
                     <Outlet/>

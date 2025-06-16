@@ -12,6 +12,7 @@ import CartIcon from '../../assets/svg/cart.svg?react';
 import FilterIcon from '../../assets/svg/filter.svg?react';
 import MenuIcon from '../../assets/svg/menu.svg?react';
 import Sidebar from '../sidebar/sidebar';
+import { userLinks } from '../../pages/user/user-links';
 
 const Header = (): ReactElement => {
   const {customer, cart} = useAppSelector((store) => store.user);
@@ -19,6 +20,7 @@ const Header = (): ReactElement => {
   const isAuthenticated = !!localStorage.getItem('refreshToken');
   const dispatch = useAppDispatch();
   const smallScreen = useScreenSize();
+  const currentPath: string | undefined = location.pathname.split('/').filter(item => item !== '')[1];
 
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
@@ -60,7 +62,10 @@ const Header = (): ReactElement => {
   return (
     <header className="header">
       {smallScreen &&
-        (location.pathname === routeList.MAIN
+        (location.pathname === routeList.MAIN 
+          || location.pathname === routeList.USER
+          || location.pathname === `${routeList.USER}/settings`
+          || location.pathname === `${routeList.USER}/address`
           ? <button className="nav__button_secondary" onClick={handleSidebarOpen}><FilterIcon/></button>
           : <div className='nav_filler'/>
         )
@@ -106,7 +111,12 @@ const Header = (): ReactElement => {
       {sidebarOpen && 
         <div className='sidebar_overlay'>
           <div className='sidebar_body'>
-            <Sidebar/>
+            {location.pathname === routeList.MAIN && <Sidebar/>}
+            {(location.pathname === routeList.USER || `${routeList.USER}/settings` || `${routeList.USER}/address`) && 
+            <div className='user-page_menu'>
+                <Link to={`${routeList.USER}/settings`} className={`user-page_menu-link ${currentPath === 'settings' ? 'active' : ''}`}>Settings</Link>
+                <Link to={`${routeList.USER}/address`} className={`user-page_menu-link ${currentPath === 'address' ? 'active' : ''}`}>Address</Link>
+            </div>}
           </div>
         </div>
       }

@@ -23,6 +23,7 @@ import { setCart } from './store/user-slice';
 import { Cart } from '@commercetools/platform-sdk';
 import { createCart } from './api/create-cart';
 import CartPage from './pages/cart/cart-page';
+import PlaceholderUser from './components/placeholder-user/placeholder-user';
 
 function App(): ReactElement {
   const toast = useAppSelector((state) => state.toast);
@@ -99,10 +100,9 @@ function App(): ReactElement {
             element={!!refreshToken ? <Navigate to="/" /> : <SignUpPage />}
           />
           <Route path={routeList.USER} element={!!refreshToken ? <UserPage/> : <Navigate to="/" /> }>
-            <Route index element={<PagePlaceholder/>}/>
+            <Route index element={<PlaceholderUser/>}/>
             <Route path={routeList.USER_SETTINGS} element={<Settings/>} />
             <Route path={routeList.USER_ADDRESS} element={<Addresses/>} />
-            <Route path={routeList.USER_SETTINGS} element={<PagePlaceholder/>} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

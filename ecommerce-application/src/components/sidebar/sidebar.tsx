@@ -6,6 +6,7 @@ import { loginUnauthorizedUser } from '../../api/unauthorized-login';
 import { Category } from '@commercetools/platform-sdk';
 import { setCurrentCategory, setFilters } from '../../store/product-slice';
 import type { Filters } from '../../types/filters';
+import Preloader from '../preloader/preloader';
 
 const Sidebar = () => {
     const {currentCategory, categories} = useAppSelector(state => state.product);
@@ -88,7 +89,7 @@ const Sidebar = () => {
                     }
                 </>
                 : loading 
-                    ? <span>Loading...</span>
+                    ? <Preloader/>
                     : error 
                     ? <span>Error</span>
                     : <></>

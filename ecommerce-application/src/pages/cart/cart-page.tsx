@@ -8,6 +8,8 @@ import { removeFromCart } from '../../api/remove-from-cart';
 import { clearCart } from '../../api/clear-cart';
 import { addToCart } from '../../api/add-to-cart';
 import CartClearIcon from '../../assets/svg/cart-xmark.svg?react';
+import { useScreenSize } from '../../hooks/use-screen-size';
+import { showToast } from '../../store/toast-slice';
 
 const CartPage = () => {
     const {cart} = useAppSelector(state => state.user);
@@ -15,6 +17,7 @@ const CartPage = () => {
     const [items, setItems] = useState<LineItem[]>([]);
     const [itemElements, setItemElements] = useState<ReactElement[]>([]);
     const navigate = useNavigate();
+    const smallScreen = useScreenSize();
 
     useEffect(() => {
         if(cart){
@@ -22,11 +25,16 @@ const CartPage = () => {
         }
     }, [cart])
 
-    const handleClearCart = () => {
+    const handleClearCart = async () => {
         if (cart) {
             const { id, version, lineItems } = cart;
             const lineItemIds = lineItems.map(item => item.id);
-            clearCart(id, version, lineItemIds, dispatch);
+            try {
+                await clearCart(id, version, lineItemIds, dispatch);
+                dispatch(showToast({ status: 'success', text: `Cart cleared successfully` }));
+            } catch {
+                dispatch(showToast({ status: 'error', text: `Failed to clear the cart` }));
+            }
         }
     }
 
@@ -80,7 +88,9 @@ const CartPage = () => {
                     <span className='row-item_price'>{item.totalPrice.currencyCode} {(item.totalPrice.centAmount / 100).toFixed(item.totalPrice.fractionDigits)}</span>
                 </td>
                 <td className='cart_table-cell__short'>
-                    <button className='row-item_remove-button' onClick={() => handleRemoveItem(item)}>Remove</button>
+                    <button className='row-item_remove-button' onClick={() => handleRemoveItem(item)}>
+                        {smallScreen ? <CartClearIcon/> : 'Remove'}
+                    </button>
                 </td>
             </tr>)
             rows.push(row);
@@ -95,11 +105,11 @@ const CartPage = () => {
             {items.length === 0 
                 ? <div className='cart_empty-placeholder'>
                     <span className='cart_empty-text'>The cart is currently empty. Do you want to add some items?</span>
-                    <button onClick={() => navigate(routeList.MAIN)}>To catalog</button>
+                    <button className='cart_contents-button' onClick={() => navigate(routeList.MAIN)}>To catalog</button>
                 </div>
                 : <div className='cart_contents'>
                     <div className='cart_contents-header'>
-                        <button className='cart_contents-clear-button' onClick={handleClearCart}>
+                        <button className='cart_contents-button' onClick={handleClearCart}>
                             <CartClearIcon/>
                             Clear cart
                         </button>
