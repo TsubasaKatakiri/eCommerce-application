@@ -152,8 +152,6 @@ const ProductPage: React.FC = () => {
     }
 
 
-    console.log(cart);
-
     return (
         <div className='product_wrapper'>
             {currentProduct

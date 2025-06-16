@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import type { ReactElement } from 'react';
-import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import './sign-up-page.css';
 import { registerUser } from '../../api/register';

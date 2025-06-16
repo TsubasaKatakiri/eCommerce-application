@@ -10,7 +10,7 @@ import ChevronLeft from '../../assets/svg/chevron-left.svg?react';
 import ChevronRight from '../../assets/svg/chevron-right.svg?react';
 
 const ProductsList: React.FC = () => {
-    const {products, total, offset, limit, searchTerm, currentCategory} = useAppSelector(state => state.product);
+    const {products, total, offset, limit, searchTerm, currentCategory, filters} = useAppSelector(state => state.product);
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
@@ -21,7 +21,7 @@ const ProductsList: React.FC = () => {
 
     const getData = async(): Promise<void> => {
       try {
-        await searchProducts(pageSize, dispatch, pageNumber, currentCategory, searchTerm);
+        await searchProducts(pageSize, dispatch, filters, pageNumber, currentCategory, searchTerm);
       } catch {
         setError(true);
       } finally {
@@ -38,7 +38,7 @@ const ProductsList: React.FC = () => {
           .catch(() => setError(true))
           .finally(() => setLoading(false))
         } else getData();
-    }, [pageSize, pageNumber, searchTerm, currentCategory])
+    }, [pageSize, pageNumber, searchTerm, currentCategory, filters])
 
     useEffect(() => {
         const buttonsNumber: number = Math.ceil(total / limit);
