@@ -1,0 +1,10 @@
+.logo-rs {
+    width: 80px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 400px;
+    transition: transform 0.2s ease;
+}
+.logo-rs:hover {
+    transform: scale(1.05);
+}
