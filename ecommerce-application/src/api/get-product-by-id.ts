@@ -17,7 +17,6 @@ export const getProductById = async (id: string, dispatch: Dispatch<UnknownActio
     },
   });
 
-  console.log(response);
   if (!response.ok) {
     throw new Error('Failed to get product');
   }

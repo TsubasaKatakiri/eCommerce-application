@@ -19,12 +19,15 @@ import Toast from './components/toast/toast';
 import ProductPage from './pages/product/product-page';
 import { loginUnauthorizedUser } from './api/unauthorized-login';
 import { routeList } from './const/routes';
+import { setCart } from './store/user-slice';
+import { Cart } from '@commercetools/platform-sdk';
+import { createCart } from './api/create-cart';
 import BasketPage from './pages/basket/basket-page';
 import AboutUs from './pages/about-us/about-us'
 
 function App(): ReactElement {
   const toast = useAppSelector((state) => state.toast);
-  const refreshToken = useAppSelector((state) => state.auth.refreshToken);
+  const {accessToken, refreshToken} = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const authHost = import.meta.env.VITE_AUTH_HOST;
@@ -60,7 +63,25 @@ function App(): ReactElement {
     }
   });
 
-  console.log(refreshToken);
+  const getCartData = async(): Promise<void> => {
+        try {
+          await createCart(dispatch);
+        } catch {
+          console.log('Fail');
+        }
+      }
+
+  useEffect(() => {
+    if(accessToken){
+      const cart = localStorage.getItem('cart');
+      if(cart){
+        const parsedCart: Cart = JSON.parse(cart);
+        dispatch(setCart(parsedCart))
+      } else {
+        getCartData();
+      }
+    }
+  }, [accessToken])
 
   return (
     <>

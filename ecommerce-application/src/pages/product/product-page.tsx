@@ -8,8 +8,11 @@ import { getCategories } from '../../api/get-categories';
 import Slider from '../../components/slider/slider';
 import { unsetCurrentProduct } from '../../store/product-slice';
 import { loginUnauthorizedUser } from '../../api/unauthorized-login';
+import { addToCart } from '../../api/add-to-cart';
+import { removeFromCart } from '../../api/remove-from-cart';
 
 const ProductPage: React.FC = () => {
+    const {cart} = useAppSelector(state => state.user);
     const {currentProduct, categories} = useAppSelector(state => state.product);
     const dispatch = useAppDispatch();
     const { productId } = useParams();
@@ -22,6 +25,9 @@ const ProductPage: React.FC = () => {
     const [price, setPrice] = useState<string>();
     const [category, setCategory] = useState<string[]>([]);
     const [imageSet, setImageSet] = useState<Image[]>([]);
+    const [isInCart, setIsInCart] = useState<boolean>(false);
+    const [lineItemId, setLineItemId] = useState<string>('');
+    const [quantity, setQuantity] = useState<number>(1);
 
     const getData = async(): Promise<void> => {
         if(productId){
@@ -36,7 +42,7 @@ const ProductPage: React.FC = () => {
             setIsLoading(false);
           }
         }
-      }
+    }
 
     useEffect(() => {
         setIsError(false);
@@ -107,6 +113,47 @@ const ProductPage: React.FC = () => {
         }
     }, [currentProduct, categories])
 
+
+    useEffect(() => {
+        if(cart && currentProduct){
+            const items = cart.lineItems;
+            const requiredItem = items.find(item => item.productId === currentProduct.id);
+            console.log(requiredItem);
+            if(requiredItem) {
+                setIsInCart(true);
+                setLineItemId(requiredItem.id)
+            }
+            else {
+                setIsInCart(false);
+                setLineItemId('')
+            }
+        }
+    }, [cart, currentProduct])
+
+
+    const handleAddToCart = async () => {
+        if(cart && currentProduct){
+            if(!isInCart){
+                try {
+                    await addToCart(cart.id, cart.version, currentProduct.id, dispatch, quantity, selectedVariant && selectedVariant.id);
+                    setIsInCart(true);
+                } catch (error) {
+                    console.log('error');
+                }
+            } else {
+                try {
+                    await removeFromCart(cart.id, cart.version, lineItemId, dispatch);
+                    setIsInCart(false);
+                } catch (error) {
+                    console.log('error');
+                }
+            }
+        }
+    }
+
+
+    console.log(cart);
+
     return (
         <div className='product_wrapper'>
             {currentProduct
@@ -128,9 +175,14 @@ const ProductPage: React.FC = () => {
                             <div className='product_variants'>
                                 {variants.map((item) => item)}
                             </div>
+                            <div>
+                                <label htmlFor='quantity'>Quantity</label>
+                                <input name='quantity' id='quantity' type='number' value={quantity} onChange={(event) => setQuantity(+event.target.value)}/>
+                            </div>
                             <div className='product_buttons-buy'>
-                                <button className='product_button-buy'>Buy Now</button>
-                                <button className='product_button-add'>Add To Cart</button>
+                                <button className='product_button-add' onClick={handleAddToCart}>
+                                    {isInCart ? 'Remove from cart' : 'Add to cart'}
+                                </button>
                             </div>
                         </div>
                     </div>

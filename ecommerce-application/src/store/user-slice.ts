@@ -24,6 +24,10 @@ export const userSlice = createSlice({
         localStorage.setItem('cart', JSON.stringify(payload.cart));
       }
     },
+    setCart: (state, { payload }: PayloadAction<Cart>) => {
+        state.cart = payload;
+        localStorage.setItem('cart', JSON.stringify(payload));
+    },
     clearUser: (state) => {
       state.customer = undefined;
       state.cart = undefined;
@@ -33,7 +37,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setUser, clearUser } = userSlice.actions;
+export const { setUser, setCart, clearUser } = userSlice.actions;
 export default userSlice.reducer;
 
 function getStoredCustomer(): Customer | undefined {

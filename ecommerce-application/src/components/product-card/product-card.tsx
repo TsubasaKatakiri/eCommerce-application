@@ -1,35 +1,86 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, type ReactElement } from 'react';
 import './product-card.css';
-import { Image, Product } from '@commercetools/platform-sdk';
+import { Image, ProductProjection } from '@commercetools/platform-sdk';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { addToCart } from '../../api/add-to-cart';
+import { removeFromCart } from '../../api/remove-from-cart';
 
 interface ProductCardContent {
-    product: Product
+    product: ProductProjection
 }
 
 const ProductCard = ({ product }: ProductCardContent): ReactElement => {
+    const {cart} = useAppSelector(state => state.user);
+    const dispatch = useAppDispatch();
     const [price, setPrice] = useState<string>('');
     const [image, setImage] = useState<Image | undefined>();
+    const [isInCart, setIsInCart] = useState<boolean>(false);
+    const [lineItemId, setLineItemId] = useState<string>('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         if(product){
-            if(product.masterData.current.masterVariant.images) setImage(product.masterData.current.masterVariant.images[0]);
-            if(product.masterData.staged.masterVariant.prices){
-                const currentPrice = product.masterData.staged.masterVariant.prices[0];
+            if(product.masterVariant.images) setImage(product.masterVariant.images[0]);
+            if(product.masterVariant.prices){
+                const currentPrice = product.masterVariant.prices[0];
                 setPrice(`${currentPrice.value.currencyCode} ${(currentPrice.value.centAmount / 100).toFixed(2)}`);
             }
         }
     }, [product]);
 
+    useEffect(() => {
+        if(cart){
+            const items = cart.lineItems;
+            const requiredItem = items.find(item => item.productId === product.id);
+            if(requiredItem) {
+                setIsInCart(true);
+                setLineItemId(requiredItem.id)
+            }
+            else {
+                setIsInCart(false);
+                setLineItemId('')
+            }
+        }
+    }, [cart])
+
+    const handleAddToCart = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+        if(cart){
+            if(!isInCart){
+                try {
+                    await addToCart(cart.id, cart.version, product.id, dispatch);
+                    setIsInCart(true);
+                } catch (error) {
+                    console.log('error');
+                }
+            } else {
+                try {
+                    await removeFromCart(cart.id, cart.version, lineItemId, dispatch);
+                    setIsInCart(false);
+                } catch (error) {
+                    console.log('error');
+                }
+            }
+        }
+    }
+
+    const handleMoveToDetails = () => {
+        navigate(`/product/${product.id}`);
+    }
+
     return (
-      <Link to={`/product/${product.id}`} className="product_card" key={product.id}>
+      <div className="product_card" key={product.id} onClick={handleMoveToDetails}>
         {image 
-            ? <img src={image.url} alt={product.masterData.current.name['en-US']} className='product-card_image'/>
+            ? <img src={image.url} alt={product.name['en-US']} className='product-card_image'/>
             : <div className='product-card_no-image'>No image</div>
         }
-        <h3>{product.masterData.current.name['en-US']}</h3>
+        <h3>{product.name['en-US']}</h3>
         <p>{price}</p>
-      </Link>
+        <button className='product-card_cart-button' onClick={(event) => handleAddToCart(event)}>
+            {isInCart ? 'Remove from cart' : 'Add to cart'}
+        </button>
+      </div>
     );
 };
 export default ProductCard;
