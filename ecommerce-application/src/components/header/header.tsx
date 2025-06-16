@@ -111,11 +111,12 @@ const Header = (): ReactElement => {
         <div className='sidebar_overlay'>
           <div className='sidebar_body'>
             {location.pathname === routeList.MAIN && <Sidebar/>}
-            {(location.pathname === routeList.USER || `${routeList.USER}/settings` || `${routeList.USER}/address`) && 
-            <div className='user-page_menu'>
-                <Link to={`${routeList.USER}/settings`} className={`user-page_menu-link ${currentPath === 'settings' ? 'active' : ''}`}>Settings</Link>
-                <Link to={`${routeList.USER}/address`} className={`user-page_menu-link ${currentPath === 'address' ? 'active' : ''}`}>Address</Link>
-            </div>}
+            {(location.pathname === routeList.USER || location.pathname === `${routeList.USER}/settings` || location.pathname === `${routeList.USER}/address`) && 
+              <div className='user-page_menu'>
+                  <Link to={`${routeList.USER}/settings`} className={`user-page_menu-link ${currentPath === 'settings' ? 'active' : ''}`}>Settings</Link>
+                  <Link to={`${routeList.USER}/address`} className={`user-page_menu-link ${currentPath === 'address' ? 'active' : ''}`}>Address</Link>
+              </div>
+            }
           </div>
         </div>
       }
