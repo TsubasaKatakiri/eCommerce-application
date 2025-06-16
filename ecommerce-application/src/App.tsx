@@ -19,7 +19,7 @@ import Toast from './components/toast/toast';
 import ProductPage from './pages/product/product-page';
 import { loginUnauthorizedUser } from './api/unauthorized-login';
 import { routeList } from './const/routes';
-
+import BasketPage from './pages/basket/basket-page';
 import AboutUs from './pages/about-us/about-us'
 
 function App(): ReactElement {
@@ -85,6 +85,7 @@ function App(): ReactElement {
           </Route>
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/about" element={<AboutUs/>}/>
+          <Route path='/basket' element={<BasketPage/>}/>
         </Routes>
       </div>
     </>
