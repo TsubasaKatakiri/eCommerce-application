@@ -10,6 +10,7 @@ import ChevronLeft from '../../assets/svg/chevron-left.svg?react';
 import ChevronRight from '../../assets/svg/chevron-right.svg?react';
 import Preloader from '../preloader/preloader';
 import ErrorMessage from '../error-message/error-message';
+import { createCart } from '../../api/create-cart';
 
 const ProductsList: React.FC = () => {
     const {products, total, offset, limit, searchTerm, currentCategory, filters} = useAppSelector(state => state.product);
@@ -36,6 +37,7 @@ const ProductsList: React.FC = () => {
         const token = localStorage.getItem('accessToken');
         if(!token){
           loginUnauthorizedUser()
+          .then(() => createCart(dispatch))
           .then(() => getData())
           .catch(() => setError(true))
           .finally(() => setLoading(false))

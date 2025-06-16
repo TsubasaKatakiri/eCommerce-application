@@ -12,7 +12,6 @@ import CartIcon from '../../assets/svg/cart.svg?react';
 import FilterIcon from '../../assets/svg/filter.svg?react';
 import MenuIcon from '../../assets/svg/menu.svg?react';
 import Sidebar from '../sidebar/sidebar';
-import { userLinks } from '../../pages/user/user-links';
 
 const Header = (): ReactElement => {
   const {customer, cart} = useAppSelector((store) => store.user);

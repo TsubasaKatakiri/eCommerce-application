@@ -26,6 +26,7 @@ import CartPage from './pages/cart/cart-page';
 import PlaceholderUser from './components/placeholder-user/placeholder-user';
 
 function App(): ReactElement {
+  const {cart} = useAppSelector((store) => store.user);
   const toast = useAppSelector((state) => state.toast);
   const {accessToken, refreshToken} = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
@@ -72,16 +73,16 @@ function App(): ReactElement {
       }
 
   useEffect(() => {
-    if(accessToken){
-      const cart = localStorage.getItem('cart');
-      if(cart){
-        const parsedCart: Cart = JSON.parse(cart);
+    if(accessToken && !cart){
+      const cartData = localStorage.getItem('cart');
+      if(cartData){
+        const parsedCart: Cart = JSON.parse(cartData);
         dispatch(setCart(parsedCart))
       } else {
         getCartData();
       }
     }
-  }, [accessToken])
+  }, [accessToken, cart])
 
   return (
     <>

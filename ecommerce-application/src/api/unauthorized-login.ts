@@ -26,4 +26,5 @@ export const loginUnauthorizedUser = async (): Promise<void> => {
   const accessTokenBestBefore: number = Date.now() + tokenData.expires_in * 1000;
   localStorage.setItem('accessTokenBestBefore', accessTokenBestBefore.toString());
   localStorage.setItem('accessToken', tokenData.access_token);
+  
 };
