@@ -1,0 +1,260 @@
+.signup_wrapper {
+  width: 100%;
+  height: 100%;
+  min-height: calc(100vh - 64px - 48px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.singup-form__wrapper {
+  width: 100%;
+  max-width: 768px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.singup-form__title {
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+  color: #532d2d;
+  margin: 10px auto;
+}
+
+.singup-form__register {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+  color: #532d2d;
+  margin: 10px auto;
+}
+
+.signup-form__group {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.singup-form__input-group {
+  width: calc(100% - 80px);
+}
+
+.singup-form__input-password {
+  display: flex;
+  position: relative;
+}
+
+.signup-form_password-button {
+  border: 0;
+  outline: 0;
+  background-color: transparent;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+}
+
+.signup-form_password-button:focus {
+  outline: 0;
+}
+
+.singup-form__label {
+  width: 80px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 1px;
+  text-align: left;
+  color: #333333;
+}
+
+.singup-form__error {
+  font-weight: 400;
+  font-size: 12px;
+  color: #ff0000;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+.singup-form__input,
+.singup-form__select {
+  width: 100%;
+  outline: none;
+  padding: 10px;
+  font-size: 14px;
+  color: #333333;
+  border: 1px solid #333333;
+  border-radius: 5px;
+  margin: 0 0 5px auto;
+}
+
+.singup-form__input :focus {
+  border: 1px solid #ff3d9e;
+  outline: none;
+}
+
+.singup-form__select {
+  width: 100%;
+}
+
+.singup-form__input::placeholder,
+.singup-form__option {
+  color: #888888;
+  font-style: italic;
+}
+
+.singup-form__input:-webkit-autofill,
+.singup-form__input:-webkit-autofill:hover,
+.singup-form__input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 30px #ffffff inset;
+}
+
+.signup-form__address {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.singup-form__fielset {
+  width: calc((100% / 2) - 10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.singup-form__fielset .singup-form__group {
+  width: 100%;
+}
+
+.singup-form__fielset .singup-form__input {
+  width: 100%;
+}
+.singup-form__legend {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #333333;
+}
+
+.signup-form__submit {
+  width: 150px;
+  font-size: 16px;
+  background-color: #ff3d9e;
+  border: 1px solid #ff3d9e;
+  border-radius: 5px;
+  padding: 10px;
+  outline: 0;
+  color: #ffffff;
+  cursor: pointer;
+  transition:
+    color 0.25s linear,
+    background-color 0.25s linear;
+}
+
+.signup-form__submit:hover {
+  border: 1px solid #ff3d9e;
+  background-color: #ffffff;
+  color: #ff3d9e;
+}
+
+.signup-form__submit:disabled {
+  border: 1px solid #747474;
+  background-color: #747474;
+  color: #ffffff;
+  cursor: default;
+}
+
+.singup-form__password-button {
+  width: 80px;
+  font-size: 14px;
+  padding: 10px;
+  background-color: #ff3d9e;
+  border: 1px solid #ff3d9e;
+  border-radius: 5px;
+  outline: 0;
+  color: #ffffff;
+  cursor: pointer;
+  transition:
+    color 0.25s linear,
+    background-color 0.25s linear;
+  margin: 0 0 10px 10px;
+}
+
+.singup-form__password-button:hover {
+  border: 1px solid #ff3d9e;
+  background-color: #ffffff;
+  color: #ff3d9e;
+}
+
+.singup-form__checkbox {
+  display: none;
+}
+.singup-form__custom-checkbox {
+  display: inline-block;
+  position: relative;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #ff3d9e;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.singup-form__custom-checkbox::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  bottom: 3px;
+  right: 3px;
+  background: #ff3d9e;
+  border-radius: 5px;
+  transform: scale(0);
+  transition: 0.25s;
+}
+
+.singup-form__checkbox:checked + .singup-form__custom-checkbox::before {
+  transform: scale(1);
+}
+
+.singup-form__label-checkbox {
+  width: 100%;
+}
+
+.singup-form__group-commonaddress {
+  width: auto;
+  margin: 10 auto;
+}
+
+@media screen and (max-width: 576px) {
+  .signup-form__address {
+    flex-direction: column;
+  }
+
+  .singup-form__fielset {
+    width: 100%;
+  }
+}

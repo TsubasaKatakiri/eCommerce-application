@@ -1,0 +1,14 @@
+.placeholder-user_wrapper{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.placeholder-user_text{
+    font-weight: 400;
+    font-style: italic;
+    color: #888888;
+    text-align: center;
+}

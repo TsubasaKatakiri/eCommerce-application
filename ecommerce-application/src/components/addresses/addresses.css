@@ -1,0 +1,67 @@
+.addresses_wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.addresses_header{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.addresses_title{
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 24px;
+    letter-spacing: 1px;
+    color: #333333;
+}
+
+.addresses_container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.addresses_column{
+    width: calc((100% - 20px) / 2);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.addresses_column-title{
+    font-weight: 500;
+    font-size: 18px;
+    color: #333333;
+}
+
+.addresses_column-content{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+@media screen and (max-width: 880px){
+    .addresses_container{
+        flex-direction: column;
+    }
+
+    .addresses_column{
+        width: 100%;
+    }
+}
