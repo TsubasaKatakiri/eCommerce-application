@@ -106,9 +106,9 @@ function App(): ReactElement {
             <Route path={routeList.USER_SETTINGS} element={<Settings/>} />
             <Route path={routeList.USER_ADDRESS} element={<Addresses/>} />
           </Route>
-          <Route path="*" element={<NotFoundPage />} />
           <Route path={routeList.ABOUT} element={<AboutUs/>}/>
           <Route path='/basket' element={<BasketPage/>}/>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
     </>

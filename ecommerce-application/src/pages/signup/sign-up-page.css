@@ -250,7 +250,7 @@
 }
 
 @media screen and (max-width: 576px) {
-  .singup-form__address {
+  .signup-form__address {
     flex-direction: column;
   }
 

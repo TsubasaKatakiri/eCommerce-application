@@ -56,8 +56,6 @@ const ProductsList: React.FC = () => {
         setPaginationButtons(pageButtons);
     }, [products, total, limit])
 
-    console.log(discountCodes);
-
     return (
         <div className='product-list'>
             <div className='product-list_search'>
@@ -68,8 +66,8 @@ const ProductsList: React.FC = () => {
             </div>
             {discountCodes.length > 0 && 
                 <div className='product-codes_area'>
-                    {discountCodes.map(item => 
-                        <div className='product_code'>
+                    {discountCodes.map((item, index) => 
+                        <div className='product_code' key={index}>
                             <span className='product_code-description'>{item.description && item.description['en-US']}</span>
                         </div>
                     )}

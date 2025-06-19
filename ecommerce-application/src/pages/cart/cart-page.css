@@ -207,3 +207,18 @@
         gap: 10px;
     }
 }
+
+@media screen and (max-width: 410px){
+    .cart_contents-header{
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .promo-code_section{
+        width: 100%;
+    }
+
+    .promo-code_input{
+        width: 100%;
+    }
+}

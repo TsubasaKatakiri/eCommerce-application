@@ -179,7 +179,7 @@ const ProductPage: React.FC = () => {
                             </div>
                             <div>
                                 <label htmlFor='quantity'>Quantity</label>
-                                <input name='quantity' id='quantity' type='number' value={quantity} onChange={(event) => setQuantity(+event.target.value)}/>
+                                <input name='quantity' id='quantity' type='number' min={1} step={1} value={quantity} onChange={(event) => setQuantity(+event.target.value)}/>
                             </div>
                             <div className='product_buttons-buy'>
                                 <button className='product_button-add' onClick={handleAddToCart}>
